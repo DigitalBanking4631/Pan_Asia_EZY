@@ -6,91 +6,6 @@
 
 <title>Welcome to Pan Asia EZY</title>
 
-<style>
-body{
-    margin:0;
-    font-family:Arial,Helvetica,sans-serif;
-    background:#f5f7fa;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
-
-.container{
-    background:#fff;
-    width:420px;
-    max-width:90%;
-    padding:40px;
-    border-radius:12px;
-    box-shadow:0 10px 30px rgba(0,0,0,.15);
-    text-align:center;
-}
-
-img{
-    width:120px;
-    margin-bottom:20px;
-}
-
-h1{
-    color:#004b8d;
-    margin-bottom:15px;
-}
-
-p{
-    color:#555;
-    font-size:12px;
-}
-
-.loader{
-    margin:25px auto;
-    width:45px;
-    height:45px;
-    border:5px solid #ddd;
-    border-top:5px solid #004b8d;
-    border-radius:50%;
-    animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-    100%{
-        transform:rotate(360deg);
-    }
-}
-</style>
-
-<script>
-function redirectUser(){
-
-    const ua = navigator.userAgent;
-
-    let url = "https://ezy.pabcbank.com";
-
-    if(/android/i.test(ua)){
-        url = "https://play.google.com/store/apps/details?id=com.fg.pabc";
-    }
-    else if(/iPad|iPhone|iPod/.test(ua) && !window.MSStream){
-        url = "https://apps.apple.com/lk/app/pan-asia-bank/id1211527373";
-    }
-
-    window.location.replace(url);
-}
-
-window.onload=function(){
-
-    // Redirect after 3 seconds
-    setTimeout(redirectUser,2000);
-
-}
-</script>
-
-</head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Pan Asia EZY</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -103,38 +18,73 @@ window.onload=function(){
 }
 
 body{
-    height:100vh;
+    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-
-    background:linear-gradient(135deg,#f5f7fa 0%,#dfe9f3 100%);
+    background:linear-gradient(135deg,#eef4ff 0%,#dbe8f7 100%);
     overflow:hidden;
 }
+
+/* Background circles */
+
+body::before,
+body::after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    filter:blur(80px);
+    z-index:-1;
+}
+
+body::before{
+    width:280px;
+    height:280px;
+    background:#2b7de9;
+    top:-80px;
+    left:-80px;
+    opacity:.18;
+}
+
+body::after{
+    width:320px;
+    height:320px;
+    background:#00b4ff;
+    bottom:-120px;
+    right:-120px;
+    opacity:.15;
+}
+
+/* Card */
 
 .card{
 
     width:430px;
-    padding:45px;
+    max-width:92%;
 
-    background:rgba(255,255,255,.82);
-    backdrop-filter:blur(15px);
+    padding:45px 35px;
 
-    border-radius:24px;
+    background:rgba(255,255,255,.85);
+    backdrop-filter:blur(18px);
 
-    box-shadow:
-    0 15px 40px rgba(0,0,0,.08);
+    border-radius:22px;
 
     text-align:center;
 
-    animation:fade .7s ease;
+    box-shadow:
+        0 20px 45px rgba(0,0,0,.10);
+
+    animation:fadeIn .7s ease;
 }
+
+/* Logo */
 
 .logo{
-
-    width:180px;
-    margin-bottom:35px;
+    width:170px;
+    margin-bottom:30px;
 }
+
+/* Check icon */
 
 .icon{
 
@@ -143,112 +93,92 @@ body{
 
     margin:0 auto 25px;
 
-    background:#e8f5e9;
-
     border-radius:50%;
+
+    background:#e8f5e9;
 
     display:flex;
     justify-content:center;
     align-items:center;
 
     color:#28a745;
-
     font-size:34px;
 }
 
-h2{
+/* Heading */
 
-    color:#1d3557;
+h1{
 
-    font-size:24px;
-
-    font-weight:700;
+    font-size:28px;
+    color:#003b75;
 
     margin-bottom:15px;
 }
 
-p{
+/* Text */
 
-    color:#6c757d;
+.description{
 
-    font-size:12px;
+    color:#666;
 
-    line-height:28px;
+    font-size:15px;
 
-    margin-bottom:35px;
+    line-height:1.8;
 }
 
-.loader{
-
-    width:55px;
-    height:55px;
-
-    margin:auto;
-
-    border:5px solid #dbe5ef;
-
-    border-top:5px solid #0070f3;
-
-    border-radius:50%;
-
-    animation:spin 1s linear infinite;
-}
+/* Progress Bar */
 
 .progress{
 
-    margin-top:30px;
-
     width:100%;
-    height:7px;
 
-    background:#edf2f7;
+    height:8px;
 
-    border-radius:30px;
+    background:#e9eef5;
+
+    border-radius:50px;
 
     overflow:hidden;
+
+    margin:35px 0 20px;
 }
 
 .progress span{
 
     display:block;
 
-    height:100%;
-
     width:35%;
 
-    background:linear-gradient(90deg,#0070f3,#00b4ff);
+    height:100%;
 
-    animation:progress 2s infinite;
+    background:linear-gradient(90deg,#0070f3,#00b7ff);
+
+    animation:loading 2s linear infinite;
 }
 
-.small{
+/* Footer */
 
-    margin-top:25px;
-
-    color:#9aa5b1;
+.footer{
 
     font-size:13px;
+
+    color:#8c98a4;
 }
 
-@keyframes spin{
+/* Animation */
 
-    100%{
-        transform:rotate(360deg);
-    }
-}
+@keyframes loading{
 
-@keyframes progress{
-
-    0%{
+    from{
         margin-left:-35%;
     }
 
-    100%{
+    to{
         margin-left:100%;
     }
 }
 
-@keyframes fade{
+@keyframes fadeIn{
 
     from{
         opacity:0;
@@ -261,11 +191,12 @@ p{
     }
 }
 
-@media(max-width:500px){
+/* Responsive */
+
+@media(max-width:480px){
 
 .card{
 
-    width:90%;
     padding:35px 25px;
 }
 
@@ -274,14 +205,45 @@ p{
     width:150px;
 }
 
-h2{
+h1{
 
     font-size:24px;
+}
+
+.description{
+
+    font-size:14px;
 }
 
 }
 
 </style>
+
+<script>
+
+function redirectUser(){
+
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+
+    let redirectUrl = "https://ezy.pabcbank.com";
+
+    if(/android/i.test(ua)){
+        redirectUrl = "https://play.google.com/store/apps/details?id=com.fg.pabc";
+    }
+    else if(/iPad|iPhone|iPod/.test(ua) && !window.MSStream){
+        redirectUrl = "https://apps.apple.com/lk/app/pan-asia-bank/id1211527373";
+    }
+
+    window.location.replace(redirectUrl);
+}
+
+window.onload = function(){
+
+    setTimeout(redirectUser,2000);
+
+};
+
+</script>
 
 </head>
 
@@ -289,29 +251,27 @@ h2{
 
 <div class="card">
 
-    <img class="logo"
-         src="https://online.pabcbank.com/business/assets-2.0/resources/images/logo.jpg"
-         alt="Pan Asia Bank">
+    <img
+        class="logo"
+        src="https://online.pabcbank.com/business/assets-2.0/resources/images/logo.jpg"
+        alt="Pan Asia Bank">
 
-    <div >
-  
+    <div class="icon">
+        ✓
     </div>
 
-    <h2>Welcome to Pan Asia EZY </h2>
+    <h1>Welcome to Pan Asia EZY</h1>
 
-    <p>
+    <p class="description">
         Thank you for choosing <strong>Pan Asia EZY</strong>.<br>
-        Please wait while we securely redirect you to the requested service.
+        Please wait while we securely redirect you.
     </p>
 
     <div class="progress">
         <span></span>
     </div>
 
-    <div class="small">
-        Secure Redirect
-    </div>
-
 </div>
+
 </body>
 </html>
