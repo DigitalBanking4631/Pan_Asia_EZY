@@ -86,10 +86,206 @@ window.onload=function(){
 
 </head>
 
-<body>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<div class="background-circle circle1"></div>
-<div class="background-circle circle2"></div>
+<title>Pan Asia EZY</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:linear-gradient(135deg,#f5f7fa 0%,#dfe9f3 100%);
+    overflow:hidden;
+}
+
+.card{
+
+    width:430px;
+    padding:45px;
+
+    background:rgba(255,255,255,.82);
+    backdrop-filter:blur(15px);
+
+    border-radius:24px;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.08);
+
+    text-align:center;
+
+    animation:fade .7s ease;
+}
+
+.logo{
+
+    width:180px;
+    margin-bottom:35px;
+}
+
+.icon{
+
+    width:70px;
+    height:70px;
+
+    margin:0 auto 25px;
+
+    background:#e8f5e9;
+
+    border-radius:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    color:#28a745;
+
+    font-size:34px;
+}
+
+h2{
+
+    color:#1d3557;
+
+    font-size:28px;
+
+    font-weight:700;
+
+    margin-bottom:15px;
+}
+
+p{
+
+    color:#6c757d;
+
+    font-size:16px;
+
+    line-height:28px;
+
+    margin-bottom:35px;
+}
+
+.loader{
+
+    width:55px;
+    height:55px;
+
+    margin:auto;
+
+    border:5px solid #dbe5ef;
+
+    border-top:5px solid #0070f3;
+
+    border-radius:50%;
+
+    animation:spin 1s linear infinite;
+}
+
+.progress{
+
+    margin-top:30px;
+
+    width:100%;
+    height:7px;
+
+    background:#edf2f7;
+
+    border-radius:30px;
+
+    overflow:hidden;
+}
+
+.progress span{
+
+    display:block;
+
+    height:100%;
+
+    width:35%;
+
+    background:linear-gradient(90deg,#0070f3,#00b4ff);
+
+    animation:progress 2s infinite;
+}
+
+.small{
+
+    margin-top:25px;
+
+    color:#9aa5b1;
+
+    font-size:13px;
+}
+
+@keyframes spin{
+
+    100%{
+        transform:rotate(360deg);
+    }
+}
+
+@keyframes progress{
+
+    0%{
+        margin-left:-35%;
+    }
+
+    100%{
+        margin-left:100%;
+    }
+}
+
+@keyframes fade{
+
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@media(max-width:500px){
+
+.card{
+
+    width:90%;
+    padding:35px 25px;
+}
+
+.logo{
+
+    width:150px;
+}
+
+h2{
+
+    font-size:24px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
 
 <div class="card">
 
@@ -97,28 +293,25 @@ window.onload=function(){
          src="https://online.pabcbank.com/business/assets-2.0/resources/images/logo.jpg"
          alt="Pan Asia Bank">
 
-    <div class="icon">
-        🔒
+    <div >
+  
     </div>
 
-    <h2>Welcome to Pan Asia EZY</h2>
+    <h2>Welcome to Pan Asia EZY </h2>
 
     <p>
         Thank you for choosing <strong>Pan Asia EZY</strong>.<br>
         Please wait while we securely redirect you to the requested service.
     </p>
 
-    <div class="loader"></div>
-
     <div class="progress">
         <span></span>
     </div>
 
     <div class="small">
-        Protected by Pan Asia Bank Secure Redirect
+        Secure Redirect
     </div>
 
 </div>
-
 </body>
 </html>
