@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Welcome to Pan Asia EZY</title>
+
 <style>
 body{
     margin:0;
@@ -50,3 +58,51 @@ p{
     }
 }
 </style>
+
+<script>
+function redirectUser(){
+
+    const ua = navigator.userAgent;
+
+    let url = "https://ezy.pabcbank.com";
+
+    if(/android/i.test(ua)){
+        url = "https://play.google.com/store/apps/details?id=com.fg.pabc";
+    }
+    else if(/iPad|iPhone|iPod/.test(ua) && !window.MSStream){
+        url = "https://apps.apple.com/lk/app/pan-asia-bank/id1211527373";
+    }
+
+    window.location.replace(url);
+}
+
+window.onload=function(){
+
+    // Redirect after 3 seconds
+    setTimeout(redirectUser,3000);
+
+}
+</script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Replace with your logo -->
+    <img src="logo.png" alt="Pan Asia Bank">
+
+    <h1>Welcome to Pan Asia EZY</h1>
+
+    <p>
+        Thank you for choosing Pan Asia EZY.<br><br>
+        You will be redirected automatically...
+    </p>
+
+    <div class="loader"></div>
+
+</div>
+
+</body>
+</html>
