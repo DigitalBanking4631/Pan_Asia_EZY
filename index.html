@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light only">
-    <meta name="supported-color-schemes" content="light">
-    <meta name="theme-color" content="#ffffff">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Force Light Theme -->
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<meta name="theme-color" content="#ffffff">
 
 <title>Welcome to Pan Asia EZY</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
+:root{
+    color-scheme:light;
+}
 
 *{
     margin:0;
@@ -20,41 +27,66 @@
     font-family:'Inter',sans-serif;
 }
 
+html{
+    color-scheme:light;
+    background:#eef4ff;
+    -webkit-text-size-adjust:100%;
+}
+
 body{
+
     min-height:100vh;
+
     display:flex;
     justify-content:center;
     align-items:center;
+
     background:linear-gradient(135deg,#eef4ff 0%,#dbe8f7 100%);
+
+    color:#000;
+
     overflow:hidden;
 }
 
-/* Background circles */
+/* Background */
 
 body::before,
 body::after{
+
     content:"";
+
     position:absolute;
+
     border-radius:50%;
+
     filter:blur(80px);
+
     z-index:-1;
 }
 
 body::before{
+
     width:280px;
     height:280px;
+
     background:#2b7de9;
+
     top:-80px;
     left:-80px;
+
     opacity:.18;
 }
 
 body::after{
+
     width:320px;
     height:320px;
+
     background:#00b4ff;
+
     bottom:-120px;
     right:-120px;
+
     opacity:.15;
 }
 
@@ -67,32 +99,42 @@ body::after{
 
     padding:45px 35px;
 
-    background:rgba(255,255,255,.85);
-    backdrop-filter:blur(18px);
+    background:#ffffff;
 
     border-radius:22px;
 
     text-align:center;
 
-    box-shadow:
-        0 20px 45px rgba(0,0,0,.10);
+    box-shadow:0 20px 45px rgba(0,0,0,.10);
 
     animation:fadeIn .7s ease;
+
+    color:#000;
 }
 
 /* Logo */
 
 .logo{
-    width:170px;
-    margin-bottom:30px;
-}
 
+    width:170px;
+
+    margin-bottom:30px;
+
+    display:block;
+
+    margin-left:auto;
+    margin-right:auto;
+
+    filter:none !important;
+    -webkit-filter:none !important;
+}
 
 /* Heading */
 
 h2{
 
     font-size:24px;
+
     color:#003b75;
 
     margin-bottom:15px;
@@ -109,7 +151,7 @@ h2{
     line-height:1.8;
 }
 
-/* Progress Bar */
+/* Progress */
 
 .progress{
 
@@ -148,7 +190,7 @@ h2{
     color:#8c98a4;
 }
 
-/* Animation */
+/* Animations */
 
 @keyframes loading{
 
@@ -164,40 +206,99 @@ h2{
 @keyframes fadeIn{
 
     from{
+
         opacity:0;
+
         transform:translateY(30px);
     }
 
     to{
+
         opacity:1;
+
         transform:translateY(0);
     }
 }
 
-/* Responsive */
+/* Mobile */
 
 @media(max-width:480px){
 
-.card{
+    .card{
 
-    padding:35px 25px;
+        padding:35px 25px;
+    }
+
+    .logo{
+
+        width:150px;
+    }
+
+    h2{
+
+        font-size:20px;
+    }
+
+    .description{
+
+        font-size:14px;
+    }
 }
 
-.logo{
+/* Force same colors even if device is in Dark Mode */
 
-    width:150px;
-}
+@media (prefers-color-scheme: dark){
 
-h2{
+    html{
+        background:#eef4ff !important;
+    }
 
-    font-size:20px;
-}
+    body{
 
-.description{
+        background:linear-gradient(135deg,#eef4ff 0%,#dbe8f7 100%) !important;
 
-    font-size:14px;
-}
+        color:#000 !important;
+    }
 
+    .card{
+
+        background:#ffffff !important;
+
+        color:#000 !important;
+
+        box-shadow:0 20px 45px rgba(0,0,0,.10);
+    }
+
+    h2{
+
+        color:#003b75 !important;
+    }
+
+    .description{
+
+        color:#666 !important;
+    }
+
+    .footer{
+
+        color:#8c98a4 !important;
+    }
+
+    .progress{
+
+        background:#e9eef5 !important;
+    }
+
+    .progress span{
+
+        background:linear-gradient(90deg,#0070f3,#00b7ff) !important;
+    }
+
+    img{
+
+        filter:none !important;
+        -webkit-filter:none !important;
+    }
 }
 
 </style>
@@ -211,16 +312,16 @@ function redirectUser(){
     let redirectUrl = "https://ezy.pabcbank.com";
 
     if(/android/i.test(ua)){
-        redirectUrl = "https://play.google.com/store/apps/details?id=com.fg.pabc";
+        redirectUrl="https://play.google.com/store/apps/details?id=com.fg.pabc";
     }
     else if(/iPad|iPhone|iPod/.test(ua) && !window.MSStream){
-        redirectUrl = "https://apps.apple.com/lk/app/pan-asia-bank/id1211527373";
+        redirectUrl="https://apps.apple.com/lk/app/pan-asia-bank/id1211527373";
     }
 
     window.location.replace(redirectUrl);
 }
 
-window.onload = function(){
+window.onload=function(){
 
     setTimeout(redirectUser,2000);
 
@@ -237,7 +338,7 @@ window.onload = function(){
     <img
         class="logo"
         src="https://online.pabcbank.com/business/assets-2.0/resources/images/logo.jpg"
-        alt="Pan Asia Bank">
+        alt="Pan Asia Bank Logo">
 
     <h2>Welcome to Pan Asia EZY</h2>
 
@@ -248,8 +349,9 @@ window.onload = function(){
     <div class="progress">
         <span></span>
     </div>
+
     <p class="description">
-        Thank you for choosing <strong>Pan Asia EZY</strong>.<br>
+        Thank you for choosing <strong>Pan Asia EZY</strong>.
     </p>
 
 </div>
