@@ -1,23 +1,108 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Welcome to Pan Asia EZY...</title>
-    <script>
-            window.onload = function () {
-                const ua = navigator.userAgent;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-                let url = "https://ezy.pabcbank.com";
+<title>Welcome to Pan Asia EZY</title>
 
-                if (/android/i.test(ua)) {
-                    url = "https://play.google.com/store/apps/details?id=com.fg.pabc";
-                } else if (/iPad|iPhone|iPod/.test(ua)) {
-                    url = "https://apps.apple.com/lk/app/pan-asia-bank/id1211527373";
-                }
+<style>
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f7fa;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
 
-                window.location.replace(url);
-            };
-    </script>
+.container{
+    background:#fff;
+    width:420px;
+    max-width:90%;
+    padding:40px;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+    text-align:center;
+}
+
+img{
+    width:120px;
+    margin-bottom:20px;
+}
+
+h1{
+    color:#004b8d;
+    margin-bottom:15px;
+}
+
+p{
+    color:#555;
+    font-size:16px;
+}
+
+.loader{
+    margin:25px auto;
+    width:45px;
+    height:45px;
+    border:5px solid #ddd;
+    border-top:5px solid #004b8d;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    100%{
+        transform:rotate(360deg);
+    }
+}
+</style>
+
+<script>
+function redirectUser(){
+
+    const ua = navigator.userAgent;
+
+    let url = "https://ezy.pabcbank.com";
+
+    if(/android/i.test(ua)){
+        url = "https://play.google.com/store/apps/details?id=com.fg.pabc";
+    }
+    else if(/iPad|iPhone|iPod/.test(ua) && !window.MSStream){
+        url = "https://apps.apple.com/lk/app/pan-asia-bank/id1211527373";
+    }
+
+    window.location.replace(url);
+}
+
+window.onload=function(){
+
+    // Redirect after 3 seconds
+    setTimeout(redirectUser,3000);
+
+}
+</script>
+
 </head>
+
 <body>
-    <p>Welcome to Pan Asia EZY...</p>
+
+<div class="container">
+
+    <!-- Replace with your logo -->
+    <img src="logo.png" alt="Pan Asia Bank">
+
+    <h1>Welcome to Pan Asia EZY</h1>
+
+    <p>
+        Thank you for choosing Pan Asia EZY.<br><br>
+        You will be redirected automatically...
+    </p>
+
+    <div class="loader"></div>
+
+</div>
+
 </body>
 </html>
