@@ -260,10 +260,10 @@ function redirectUser(){
     var redirectUrl = "https://ezy.pabcbank.com";
 
     if(/android/i.test(ua)){
-        redirectUrl = "https://play.google.com/store/apps/details?id=com.fg.pabc";
+        redirectUrl = "https://play.google.com/store/apps/details?id=com.panasia.retail.digital";
     }
     else if(/iPad|iPhone|iPod/.test(ua) && !window.MSStream){
-        redirectUrl = "https://apps.apple.com/lk/app/pan-asia-bank/id1211527373";
+        redirectUrl = "https://apps.apple.com/app/pan-asia-ezy/id6783772456";
     }
 
     var link = document.getElementById("fallback-link");
