@@ -356,100 +356,18 @@ tbody tr:hover { background: #f8fafc; }
 @media(max-width:520px){.modal-toolbar{grid-template-columns:1fr;gap:8px}.modal-toolbar .modal-download-wrap{grid-column:auto}.modal-download-btn{width:100%}.modal-summary span{width:100%}}
 
 
-/* Clickable Registration KPI cards */
-.card.clickable-kpi {
-  appearance:none;
-  width:100%;
-  text-align:left;
-  font-family:inherit;
-  cursor:pointer;
-}
-.card.clickable-kpi:hover {
-  transform:translateY(-2px);
-  box-shadow:0 10px 24px rgba(15,23,42,.12);
-}
-.card.clickable-kpi:focus-visible {
-  outline:3px solid rgba(37,99,235,.28);
-  outline-offset:2px;
-}
-
-/* Customer status records popup */
-.customer-modal-overlay {
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:10000;
-  padding:20px;
-  background:rgba(15,23,42,.52);
-  align-items:center;
-  justify-content:center;
-}
-.customer-modal-overlay.show { display:flex; }
-
-.customer-modal-card {
-  width:min(1250px,100%);
-  max-height:88vh;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-  background:#fff;
-  border-radius:16px;
-  box-shadow:0 24px 70px rgba(15,23,42,.30);
-}
-.customer-modal-header {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-  padding:16px 18px;
-  border-bottom:1px solid var(--line);
-}
-.customer-modal-title-wrap h2 {
-  margin:0;
-  font-size:1.05rem;
-  color:#1e293b;
-}
-.customer-modal-meta {
-  margin-top:4px;
-  color:var(--muted);
-  font-size:.75rem;
-}
-.customer-modal-close {
-  min-width:38px;
-  width:38px;
-  height:38px;
-  padding:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:1.2rem;
-  background:#f1f5f9;
-  color:#334155;
-}
-.customer-modal-body {
-  padding:14px 18px 18px;
-  overflow:auto;
-}
-.customer-modal-pagination {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:12px;
-}
-.customer-modal-pagination .pagination {
-  margin:0;
-}
-
-@media(max-width:600px) {
-  .customer-modal-overlay { padding:8px; }
-  .customer-modal-card { max-height:92vh; border-radius:12px; }
-  .customer-modal-header { padding:12px; }
-  .customer-modal-title-wrap h2 { font-size:.92rem; }
-  .customer-modal-body { padding:10px 12px 12px; }
-  .customer-modal-pagination { align-items:flex-start; }
-}
+/* Customer record popup - shown only when a user-base KPI is clicked */
+.customer-records-modal{display:none;position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,.52);padding:20px;align-items:center;justify-content:center}
+.customer-records-modal.show{display:flex}
+.customer-records-modal-card{width:min(1250px,100%);max-height:88vh;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(15,23,42,.30);display:flex;flex-direction:column;overflow:hidden}
+.customer-records-modal-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.customer-records-modal-header h3{margin:0;font-size:1rem;color:#1e293b}
+.customer-records-modal-meta{margin-top:4px;color:var(--muted);font-size:.75rem}
+.customer-records-modal-close{min-width:36px;width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;background:#f1f5f9;color:#334155}
+.customer-records-modal-body{padding:14px 18px 18px;overflow:auto}
+.customer-records-pagination{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+.customer-records-pagination .pagination{margin:0}
+@media(max-width:600px){.customer-records-modal{padding:8px}.customer-records-modal-card{max-height:92vh;border-radius:12px}.customer-records-modal-header{padding:12px}.customer-records-modal-body{padding:10px 12px 12px}}
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
@@ -473,8 +391,8 @@ tbody tr:hover { background: #f8fafc; }
   </div>
 
   <div class="main-module-tabs" role="tablist" aria-label="Dashboard modules">
-    <button id="registrationModuleBtn" class="main-module-tab active-main-module" onclick="switchMainModule('registration')">👤 User Registrations</button>
-    <button id="serviceModuleBtn" class="main-module-tab" onclick="switchMainModule('services')">🛠 Service Requests</button>
+    <button id="registrationModuleBtn" class="main-module-tab active-main-module" onclick="switchMainModule('registration')"> User Registrations</button>
+    <button id="serviceModuleBtn" class="main-module-tab" onclick="switchMainModule('services')"> Service Requests</button>
   </div>
 
   <div id="registrationModule">
@@ -502,26 +420,26 @@ tbody tr:hover { background: #f8fafc; }
 
   <!-- KPI Cards -->
   <div class="cards kpi-cards">
-    <button type="button" class="card clickable-kpi" onclick="openCustomerStatusRecords('all')" aria-label="View Total User Base records">
+    <div class="card">
       <div class="label">Total User Base</div>
       <div class="value" id="total">0</div>
-      <div class="small">Click to view current filtered users</div>
-    </button>
-    <button type="button" class="card clickable-kpi" onclick="openCustomerStatusRecords('active')" aria-label="View Active User Base records">
+      <div class="small">Total current filtered users</div>
+    </div>
+    <div class="card">
       <div class="label">Active User Base</div>
       <div class="value" id="active">0</div>
-      <div class="small">Customer Status = Active • Click to view</div>
-    </button>
-    <button type="button" class="card clickable-kpi" onclick="openCustomerStatusRecords('locked')" aria-label="View Locked User Base records">
+      <div class="small">Customer Status = Active</div>
+    </div>
+    <div class="card">
       <div class="label">Locked User Base</div>
       <div class="value" id="locked">0</div>
-      <div class="small">Customer Status = Locked • Click to view</div>
-    </button>
-    <button type="button" class="card clickable-kpi" onclick="openCustomerStatusRecords('initiated')" aria-label="View Initiated User Base records">
+      <div class="small">Customer Status = Locked</div>
+    </div>
+    <div class="card">
       <div class="label">Initiated User Base</div>
       <div class="value" id="initiated">0</div>
-      <div class="small">Registered but not activated • Click to view</div>
-    </button>
+      <div class="small">Registered but not activated</div>
+    </div>
     <div class="card">
       <div class="label">Activation Rate</div>
       <div class="value" id="rate">0%</div>
@@ -710,20 +628,19 @@ tbody tr:hover { background: #f8fafc; }
 
   <div class="footer">Pan Asia EZY Dashboard • User Registrations & Service Requests</div>
 
-  <!-- Customer Status Records Modal -->
-  <div id="customerRecordsModal" class="customer-modal-overlay" onclick="closeCustomerRecordsModal(event)">
-    <div class="customer-modal-card" onclick="event.stopPropagation()">
-      <div class="customer-modal-header">
-        <div class="customer-modal-title-wrap">
-          <h2 id="customerModalTitle">Customer Records</h2>
-          <div id="customerModalMeta" class="customer-modal-meta"></div>
+  <!-- Customer Records Popup -->
+  <div id="customerRecordsPopup" class="customer-records-modal" onclick="closeCustomerRecordsPopup(event)">
+    <div class="customer-records-modal-card" onclick="event.stopPropagation()">
+      <div class="customer-records-modal-header">
+        <div>
+          <h3 id="customerRecordsPopupTitle">Customer Records</h3>
+          <div id="customerRecordsPopupMeta" class="customer-records-modal-meta"></div>
         </div>
-        <button class="customer-modal-close" onclick="closeCustomerRecordsModal()" aria-label="Close">×</button>
+        <button class="customer-records-modal-close" onclick="closeCustomerRecordsPopup()" aria-label="Close">×</button>
       </div>
-
-      <div class="customer-modal-body">
+      <div class="customer-records-modal-body">
         <div class="table-wrap">
-          <table id="customerModalTable">
+          <table id="customerRecordsPopupTable">
             <thead>
               <tr>
                 <th>CIF Number</th>
@@ -740,22 +657,21 @@ tbody tr:hover { background: #f8fafc; }
             <tbody></tbody>
           </table>
         </div>
-
-        <div class="customer-modal-pagination">
-          <div id="customerModalCount" class="small"></div>
+        <div class="customer-records-pagination">
+          <div id="customerRecordsPopupCount" class="small"></div>
           <div class="pagination">
-            <label for="customerModalPageSize" class="page-size-label">Rows per page</label>
-            <select id="customerModalPageSize" onchange="changeCustomerModalPageSize(this.value)">
+            <label for="customerRecordsPopupPageSize" class="page-size-label">Rows per page</label>
+            <select id="customerRecordsPopupPageSize" onchange="changeCustomerRecordsPopupPageSize(this.value)">
               <option value="25" selected>25</option>
               <option value="50">50</option>
               <option value="100">100</option>
               <option value="250">250</option>
             </select>
-            <button class="secondary page-btn" onclick="goToCustomerModalPage(1)">«</button>
-            <button class="secondary page-btn" onclick="goToCustomerModalPage(customerModalPage - 1)">‹</button>
-            <span id="customerModalPageInfo" class="page-info">Page 1 of 1</span>
-            <button class="secondary page-btn" onclick="goToCustomerModalPage(customerModalPage + 1)">›</button>
-            <button class="secondary page-btn" onclick="goToCustomerModalPage(customerModalTotalPages())">»</button>
+            <button class="secondary page-btn" onclick="goToCustomerRecordsPopupPage(1)">«</button>
+            <button class="secondary page-btn" onclick="goToCustomerRecordsPopupPage(customerRecordsPopupPage-1)">‹</button>
+            <span id="customerRecordsPopupPageInfo" class="page-info">Page 1 of 1</span>
+            <button class="secondary page-btn" onclick="goToCustomerRecordsPopupPage(customerRecordsPopupPage+1)">›</button>
+            <button class="secondary page-btn" onclick="goToCustomerRecordsPopupPage(customerRecordsPopupTotalPages())">»</button>
           </div>
         </div>
       </div>
@@ -1489,72 +1405,71 @@ window.addEventListener("resize", () => {
 
 
 /* =====================================================
-   CUSTOMER STATUS RECORDS POPUP
+   USER BASE KPI CLICK FUNCTIONALITY
+   Existing KPI UI is intentionally left unchanged.
    ===================================================== */
-let CUSTOMER_MODAL_ROWS = [];
-let customerModalPage = 1;
-let customerModalPageSize = 25;
+let CUSTOMER_RECORDS_POPUP_ROWS = [];
+let customerRecordsPopupPage = 1;
+let customerRecordsPopupPageSize = 25;
 
-const CUSTOMER_STATUS_TITLES = {
-  all: "Total User Base — Customer Records",
-  active: "Active User Base — Customer Records",
-  locked: "Locked User Base — Customer Records",
-  initiated: "Initiated User Base — Customer Records"
-};
+function openCustomerRecordsPopup(mode) {
+  const m = String(mode || "all").toLowerCase();
 
-function openCustomerStatusRecords(status) {
-  const normalized = String(status || "all").toLowerCase();
+  if (m === "all") {
+    CUSTOMER_RECORDS_POPUP_ROWS = [...FILTERED];
+  } else {
+    CUSTOMER_RECORDS_POPUP_ROWS = FILTERED.filter(r =>
+      String(r["Customer Status"] || "").trim().toLowerCase() === m
+    );
+  }
 
-  CUSTOMER_MODAL_ROWS = normalized === "all"
-    ? [...FILTERED]
-    : FILTERED.filter(r =>
-        String(r["Customer Status"] || "").trim().toLowerCase() === normalized
-      );
+  customerRecordsPopupPage = 1;
 
-  customerModalPage = 1;
-  document.getElementById("customerModalTitle").textContent =
-    CUSTOMER_STATUS_TITLES[normalized] || "Customer Records";
+  const titles = {
+    all: "Total User Base — Customer Records",
+    active: "Active User Base — Customer Records",
+    locked: "Locked User Base — Customer Records",
+    initiated: "Initiated User Base — Customer Records"
+  };
 
-  const statusText = normalized === "all"
-    ? "Current filtered user base"
-    : "Customer Status = " + normalized.charAt(0).toUpperCase() + normalized.slice(1);
+  document.getElementById("customerRecordsPopupTitle").textContent =
+    titles[m] || "Customer Records";
 
-  document.getElementById("customerModalMeta").textContent =
-    `${statusText} • ${CUSTOMER_MODAL_ROWS.length.toLocaleString()} record(s)`;
+  document.getElementById("customerRecordsPopupMeta").textContent =
+    `${CUSTOMER_RECORDS_POPUP_ROWS.length.toLocaleString()} relevant record(s)`;
 
-  renderCustomerModalRecords();
-
-  document.getElementById("customerRecordsModal").classList.add("show");
+  renderCustomerRecordsPopup();
+  document.getElementById("customerRecordsPopup").classList.add("show");
   document.body.style.overflow = "hidden";
 }
 
-function customerModalTotalPages() {
-  return Math.max(1, Math.ceil(CUSTOMER_MODAL_ROWS.length / customerModalPageSize));
+function customerRecordsPopupTotalPages() {
+  return Math.max(1, Math.ceil(CUSTOMER_RECORDS_POPUP_ROWS.length / customerRecordsPopupPageSize));
 }
 
-function goToCustomerModalPage(page) {
-  customerModalPage = Math.max(
+function goToCustomerRecordsPopupPage(page) {
+  customerRecordsPopupPage = Math.max(
     1,
-    Math.min(Number(page) || 1, customerModalTotalPages())
+    Math.min(Number(page) || 1, customerRecordsPopupTotalPages())
   );
-  renderCustomerModalRecords();
+  renderCustomerRecordsPopup();
 }
 
-function changeCustomerModalPageSize(size) {
-  customerModalPageSize = Math.max(1, Number(size) || 25);
-  customerModalPage = 1;
-  renderCustomerModalRecords();
+function changeCustomerRecordsPopupPageSize(value) {
+  customerRecordsPopupPageSize = Number(value) || 25;
+  customerRecordsPopupPage = 1;
+  renderCustomerRecordsPopup();
 }
 
-function renderCustomerModalRecords() {
-  const totalPages = customerModalTotalPages();
-  if (customerModalPage > totalPages) customerModalPage = totalPages;
+function renderCustomerRecordsPopup() {
+  const total = CUSTOMER_RECORDS_POPUP_ROWS.length;
+  const pages = customerRecordsPopupTotalPages();
+  if (customerRecordsPopupPage > pages) customerRecordsPopupPage = pages;
 
-  const start = (customerModalPage - 1) * customerModalPageSize;
-  const rows = CUSTOMER_MODAL_ROWS.slice(start, start + customerModalPageSize);
-  const tbody = document.querySelector("#customerModalTable tbody");
+  const start = (customerRecordsPopupPage - 1) * customerRecordsPopupPageSize;
+  const rows = CUSTOMER_RECORDS_POPUP_ROWS.slice(start, start + customerRecordsPopupPageSize);
 
-  tbody.innerHTML = rows.length
+  document.querySelector("#customerRecordsPopupTable tbody").innerHTML = rows.length
     ? rows.map(r => `
       <tr>
         <td>${esc(r["CIF Number"])}</td>
@@ -1566,30 +1481,39 @@ function renderCustomerModalRecords() {
         <td>${esc(r["Registration Type"])}</td>
         <td>${esc(r["Created Date Time"])}</td>
         <td>${badge(r["OB Legacy Data Migration Status"])}</td>
-      </tr>
-    `).join("")
-    : '<tr><td colspan="9" class="empty">No matching customer records</td></tr>';
+      </tr>`).join("")
+    : '<tr><td colspan="9" class="empty">No relevant customer records found</td></tr>';
 
-  const from = CUSTOMER_MODAL_ROWS.length ? start + 1 : 0;
-  const to = Math.min(start + customerModalPageSize, CUSTOMER_MODAL_ROWS.length);
+  const from = total ? start + 1 : 0;
+  const to = Math.min(start + customerRecordsPopupPageSize, total);
 
-  document.getElementById("customerModalCount").textContent =
-    `Showing ${from.toLocaleString()}–${to.toLocaleString()} of ${CUSTOMER_MODAL_ROWS.length.toLocaleString()} record(s)`;
+  document.getElementById("customerRecordsPopupCount").textContent =
+    `Showing ${from.toLocaleString()}–${to.toLocaleString()} of ${total.toLocaleString()} records`;
 
-  document.getElementById("customerModalPageInfo").textContent =
-    `Page ${customerModalPage.toLocaleString()} of ${totalPages.toLocaleString()}`;
+  document.getElementById("customerRecordsPopupPageInfo").textContent =
+    `Page ${customerRecordsPopupPage.toLocaleString()} of ${pages.toLocaleString()}`;
 }
 
-function closeCustomerRecordsModal(event) {
-  if (event && event.target !== document.getElementById("customerRecordsModal")) return;
-  document.getElementById("customerRecordsModal").classList.remove("show");
+function closeCustomerRecordsPopup(event) {
+  if (event && event.target !== document.getElementById("customerRecordsPopup")) return;
+  document.getElementById("customerRecordsPopup").classList.remove("show");
   document.body.style.overflow = "";
 }
 
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") {
-    closeCustomerRecordsModal();
-  }
+/* Attach click functionality without changing the KPI card HTML or styling */
+function attachUserBaseKpiClicks() {
+  const cards = document.querySelectorAll(".kpi-cards .card");
+  if (cards.length < 4) return;
+
+  const modes = ["all", "active", "locked", "initiated"];
+  cards.forEach((card, index) => {
+    if (index > 3) return; // Activation Rate remains display-only
+    card.addEventListener("click", () => openCustomerRecordsPopup(modes[index]));
+  });
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeCustomerRecordsPopup();
 });
 
 
@@ -1977,6 +1901,8 @@ document.getElementById("serviceSearch").addEventListener("input", () => {
   });
 });
 
+
+attachUserBaseKpiClicks();
 
 /* Init */
 updatePagination();
