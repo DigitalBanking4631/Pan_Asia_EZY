@@ -2,40 +2,74 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Pan Asia EZY Registration Dashboard</title>
+
+<!-- Security: restrict what this page can load/run/connect to -->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline';
+  style-src 'self' https://fonts.googleapis.com 'unsafe-inline';
+  font-src https://fonts.gstatic.com;
+  img-src 'self' data:;
+  connect-src 'self' https://docs.google.com https://*.googleusercontent.com;
+  object-src 'none';
+  base-uri 'self';
+  frame-ancestors 'self';
+  form-action 'none';
+  upgrade-insecure-requests;
+">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f0f4f9;
+  --bg: #eef2f9;
+  --bg-accent: radial-gradient(1200px 500px at 100% -10%, #e3ecff 0%, transparent 60%);
   --card: #ffffff;
-  --text: #0f172a;
+  --text: #0b1424;
   --muted: #64748b;
-  --line: #e2e8f0;
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
-  --primary-soft: #eff6ff;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.06), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-  --radius: 12px;
-  --radius-sm: 8px;
-  --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  --line: #e3e8f0;
+  --primary: #1d4ed8;
+  --primary-2: #0ea5e9;
+  --primary-hover: #1a3fb8;
+  --primary-soft: #eef4ff;
+  --success: #0f9d6e;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 6px 16px -8px rgb(15 23 42 / 0.10);
+  --shadow-lg: 0 12px 28px -8px rgb(15 23 42 / 0.18);
+  --radius: 14px;
+  --radius-sm: 9px;
+  --transition: 160ms cubic-bezier(0.4, 0, 0.2, 1);
+  --focus-ring: 0 0 0 3px rgba(29, 78, 216, 0.28);
 }
 * { box-sizing: border-box; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--bg-accent), var(--bg);
+  background-attachment: fixed;
   color: var(--text);
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
-.container { max-width: 1480px; margin: 0 auto; padding: 20px 24px 40px; }
+.container { max-width: 1480px; margin: 0 auto; padding: 22px 24px 48px; }
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: 6px;
+}
 
 /* Header */
 .header {
@@ -43,177 +77,94 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   flex-wrap: wrap;
 }
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
+.header-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
 .logo {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
-  object-fit: contain;
-  flex-shrink: 0;
-  background: #fff;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
+  width: 50px; height: 50px; border-radius: 11px; object-fit: contain;
+  flex-shrink: 0; background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow);
 }
 .logo-placeholder {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-weight: 800;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-  box-shadow: var(--shadow);
+  width: 50px; height: 50px; border-radius: 11px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 800; font-size: 1.1rem; flex-shrink: 0; box-shadow: var(--shadow);
 }
-h1 { margin: 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
-.subtitle { color: var(--muted); font-size: 0.8125rem; margin-top: 4px; }
+h1 {
+  margin: 0; font-family: Manrope, Inter, sans-serif;
+  font-size: 1.55rem; font-weight: 800; letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+.subtitle { color: var(--primary); font-size: 0.8125rem; margin-top: 3px; font-weight: 600; }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
 button, .file-btn {
-  border: 0;
-  border-radius: var(--radius-sm);
-  padding: 9px 14px;
-  font-weight: 600;
-  font-size: 0.8125rem;
-  cursor: pointer;
-  background: var(--primary);
-  color: #fff;
+  border: 0; border-radius: var(--radius-sm); padding: 10px 15px;
+  font-weight: 600; font-size: 0.8125rem; cursor: pointer;
+  background: var(--primary); color: #fff;
   transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  display: inline-flex; align-items: center; gap: 6px;
 }
 button:hover { background: var(--primary-hover); }
 button:active { transform: scale(0.98); }
 button.secondary, .file-btn.secondary {
-  background: #fff;
-  color: #334155;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
+  background: #fff; color: #334155; border: 1px solid var(--line); box-shadow: var(--shadow);
 }
 button.secondary:hover { background: #f8fafc; border-color: #cbd5e1; }
-button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
 /* Status */
 .statusbar {
-  background: var(--card);
-  border: 1px solid var(--line);
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-  font-size: 0.75rem;
-  box-shadow: var(--shadow);
+  background: var(--card); border: 1px solid var(--line); padding: 11px 14px;
+  border-radius: var(--radius-sm); display: flex; justify-content: space-between;
+  align-items: center; gap: 12px; margin-bottom: 16px; font-size: 0.75rem; box-shadow: var(--shadow);
 }
 .dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  display: inline-block; background: var(--success);
-  margin-right: 8px; vertical-align: middle;
+  width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+  background: var(--success); margin-right: 8px; vertical-align: middle;
   transition: background var(--transition);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 18%, transparent);
 }
-.dot.warn { background: var(--warning); }
-.dot.error { background: var(--danger); }
+.dot.warn { background: var(--warning); box-shadow: 0 0 0 3px color-mix(in srgb, var(--warning) 18%, transparent); }
+.dot.error { background: var(--danger); box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 18%, transparent); }
 
 /* Filters */
-.filters {
-  background: var(--card);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 16px;
-}
-.filter-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 12px;
-}
-label {
-  display: block;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: #475569;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
+.filters { background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+.filter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+label { display: block; font-size: 0.6875rem; font-weight: 700; color: #475569; margin-bottom: 5px; letter-spacing: 0.01em; }
 select, input {
-  width: 100%;
-  height: 36px;
-  border: 1px solid #cbd5e1;
-  border-radius: var(--radius-sm);
-  padding: 0 10px;
-  background: #fff;
-  color: var(--text);
-  font-size: 0.8125rem;
+  width: 100%; height: 38px; border: 1px solid #cbd5e1; border-radius: var(--radius-sm);
+  padding: 0 10px; background: #fff; color: var(--text); font-size: 16px;
   transition: border-color var(--transition), box-shadow var(--transition);
 }
-select:focus, input:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-}
+select { font-size: 0.8125rem; }
+select:focus, input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12); }
 .filter-actions { margin-top: 12px; display: flex; gap: 8px; }
 
 /* KPI Cards */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
-}
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 16px 18px;
-  box-shadow: var(--shadow);
-  transition: box-shadow var(--transition), transform var(--transition);
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 17px 18px; box-shadow: var(--shadow);
+  transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+  border-top: 3px solid var(--card-accent, var(--primary));
 }
-.card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+.card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
 .card .label { color: var(--muted); font-size: 0.75rem; font-weight: 600; }
-.value { font-size: 1.75rem; font-weight: 800; margin-top: 4px; letter-spacing: -0.03em; }
+.value { font-family: Manrope, Inter, sans-serif; font-size: 1.8rem; font-weight: 800; margin-top: 4px; letter-spacing: -0.03em; }
 .small { font-size: 0.6875rem; color: var(--muted); margin-top: 2px; }
+#total ~ .small, .card:nth-child(1) { --card-accent: var(--primary); }
+.card:nth-child(2) { --card-accent: var(--success); }
+.card:nth-child(3) { --card-accent: var(--danger); }
+.card:nth-child(4) { --card-accent: var(--warning); }
+.card:nth-child(5) { --card-accent: var(--primary-2); }
 
 /* Charts & Panels */
-.charts-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  margin-bottom: 16px;
-}
-.grid2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 16px;
-}
-.panel {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 16px;
-}
-.panel h2 {
-  font-size: 0.875rem;
-  font-weight: 700;
-  margin: 0 0 12px;
-  color: #1e293b;
-}
+.charts-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 16px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 17px; }
+.panel h2 { font-size: 0.875rem; font-weight: 700; margin: 0 0 12px; color: #1e293b; }
 .chart-panel { min-height: 300px; }
 .chart-wrap { position: relative; height: 240px; }
 .chart-wrap.tall { height: 300px; }
@@ -222,111 +173,46 @@ select:focus, input:focus {
 /* Tables */
 .table-wrap { overflow: auto; border-radius: var(--radius-sm); }
 table { width: 100%; border-collapse: collapse; font-size: 0.75rem; min-width: 580px; }
-th, td {
-  padding: 9px 10px;
-  border-bottom: 1px solid var(--line);
-  text-align: left;
-  white-space: nowrap;
-}
+th, td { padding: 9px 10px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
 th {
-  background: #f8fafc;
-  color: #475569;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+  background: #f8fafc; color: #475569; font-size: 0.6875rem; font-weight: 700;
+  position: sticky; top: 0; z-index: 1; letter-spacing: 0.01em;
 }
 tbody tr { transition: background var(--transition); }
 tbody tr:hover { background: #f8fafc; }
 
-.badge {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 999px;
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-}
-.active, .completed { background: #ecfdf5; color: #047857; }
-.initiated { background: #fffbeb; color: #b45309; }
-.failed { background: #fef2f2; color: #b91c1c; }
+.badge { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 0.625rem; font-weight: 700; letter-spacing: 0.01em; }
+.active, .completed { background: #e7f8f1; color: #067a56; }
+.initiated { background: #fef3e2; color: #b45309; }
+.failed { background: #fdecec; color: #b91c1c; }
 .blank { background: #f1f5f9; color: #64748b; }
 
 /* Summary matrices */
 .summary-matrix { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
-.summary-matrix th, .summary-matrix td {
-  padding: 9px 12px;
-  border-bottom: 1px solid var(--line);
-  white-space: nowrap;
-}
-.summary-matrix th { background: #f8fafc; color: #334155; font-weight: 600; }
-.summary-matrix th:not(:first-child),
-.summary-matrix td:not(:first-child) { text-align: right; }
-.summary-matrix th:first-child,
-.summary-matrix td:first-child { text-align: left; }
+.summary-matrix th, .summary-matrix td { padding: 9px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.summary-matrix th { background: #f8fafc; color: #334155; font-weight: 700; }
+.summary-matrix th:not(:first-child), .summary-matrix td:not(:first-child) { text-align: right; }
+.summary-matrix th:first-child, .summary-matrix td:first-child { text-align: left; }
 
 /* Tabs & Pagination */
-.tabbar {
-  display: flex;
-  gap: 2px;
-  border-bottom: 1px solid var(--line);
-  margin-bottom: 12px;
-}
-.tab {
-  background: transparent;
-  color: var(--muted);
-  border: 0;
-  border-radius: 0;
-  padding: 10px 14px;
-  font-weight: 600;
-  font-size: 0.8125rem;
-  position: relative;
-}
+.tabbar { display: flex; gap: 2px; border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+.tab { background: transparent; color: var(--muted); border: 0; border-radius: 0; padding: 10px 14px; font-weight: 600; font-size: 0.8125rem; position: relative; }
 .tab:hover { color: var(--text); background: transparent; }
-.tab.active-tab {
-  color: var(--primary);
-  background: transparent;
-}
-.tab.active-tab::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: -1px;
-  height: 2px;
-  background: var(--primary);
-  border-radius: 2px 2px 0 0;
-}
-.records-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
-}
+.tab.active-tab { color: var(--primary); background: transparent; }
+.tab.active-tab::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--primary); border-radius: 2px 2px 0 0; }
+.records-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
 .pagination { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.pagination select { width: auto; height: 30px; padding: 0 8px; font-size: 0.75rem; }
+.pagination select { width: auto; height: 32px; padding: 0 8px; font-size: 0.75rem; }
 .page-size-label { margin: 0; font-size: 0.6875rem; color: var(--muted); font-weight: 600; }
-.page-btn { min-width: 30px; height: 30px; padding: 4px 8px; font-size: 0.875rem; }
+.page-btn { min-width: 32px; height: 32px; padding: 4px 8px; font-size: 0.875rem; }
 .page-info { font-size: 0.75rem; color: #475569; min-width: 70px; text-align: center; }
 
-.footer {
-  color: #94a3b8;
-  font-size: 0.6875rem;
-  text-align: center;
-  padding: 20px 0 8px;
-}
-.empty { text-align: center; color: var(--muted); padding: 28px; }
+.footer { color: #94a3b8; font-size: 0.6875rem; text-align: center; padding: 22px 0 calc(8px + env(safe-area-inset-bottom)); }
+.empty { text-align: center; color: var(--muted); padding: 30px; }
 
 /* =========================
    RESPONSIVE DESIGN
    ========================= */
-
-/* Tablet */
 @media (max-width: 1100px) {
   .container { padding: 16px 18px 32px; }
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -335,594 +221,174 @@ tbody tr:hover { background: #f8fafc; }
   .filter-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-/* Mobile and small tablets */
 @media (max-width: 768px) {
   body { overflow-x: hidden; }
-
-  .container {
-    width: 100%;
-    padding: 12px;
-  }
-
-  .header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-
-  .header-left {
-    width: 100%;
-    gap: 10px;
-    min-width: 0;
-  }
-
-  .logo {
-    width: 44px;
-    height: 44px;
-  }
-
-  h1 {
-    font-size: 1.1rem;
-    line-height: 1.25;
-    overflow-wrap: anywhere;
-  }
-
+  .container { width: 100%; padding: 12px; }
+  .header { flex-direction: column; align-items: stretch; gap: 12px; }
+  .header-left { width: 100%; gap: 10px; min-width: 0; }
+  .logo, .logo-placeholder { width: 44px; height: 44px; }
+  h1 { font-size: 1.1rem; line-height: 1.25; }
   .subtitle { font-size: 0.72rem; }
-
-  .actions {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .actions button {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .statusbar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
-  }
-
-  #lastUpdated {
-    width: 100%;
-    overflow-wrap: anywhere;
-  }
-
-  .filters {
-    padding: 12px;
-  }
-
-  .filter-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .filter-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .filter-actions button {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .card {
-    padding: 13px;
-  }
-
-  .value {
-    font-size: 1.45rem;
-  }
-
-  .charts-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .panel {
-    padding: 12px;
-    min-width: 0;
-  }
-
-  .chart-panel {
-    min-height: 280px;
-  }
-
-  .chart-wrap {
-    height: 250px;
-  }
-
-  .chart-wrap.tall {
-    height: 330px;
-  }
-
-  .panel h2 {
-    font-size: 0.85rem;
-    line-height: 1.35;
-  }
-
-  .table-wrap {
-    width: 100%;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  table {
-    font-size: 0.7rem;
-  }
-
-  th, td {
-    padding: 8px;
-  }
-
-  .tabbar {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    white-space: nowrap;
-  }
-
-  .tab {
-    flex: 0 0 auto;
-    padding: 10px 12px;
-  }
-
-  .records-footer {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  #recordCount {
-    line-height: 1.5;
-  }
-
-  .pagination {
-    width: 100%;
-    justify-content: flex-start;
-  }
-}
-
-/* Small phones */
-@media (max-width: 480px) {
-  .container {
-    padding: 8px;
-  }
-
-  .header-left {
-    align-items: flex-start;
-  }
-
-  .logo {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-  }
-
-  h1 {
-    font-size: 1rem;
-  }
-
-  .actions {
-    grid-template-columns: 1fr;
-  }
-
-  button, .file-btn {
-    min-height: 40px;
-    padding: 9px 10px;
-    font-size: 0.75rem;
-  }
-
-  .statusbar {
-    padding: 9px 10px;
-    font-size: 0.68rem;
-  }
-
-  .filter-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .filter-actions {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .cards {
-    grid-template-columns: 1fr;
-  }
-
-  .card {
-    padding: 14px;
-  }
-
-  .card:hover {
-    transform: none;
-  }
-
-  .value {
-    font-size: 1.6rem;
-  }
-
-  .panel {
-    padding: 10px;
-  }
-
-  .panel h2 {
-    font-size: 0.8rem;
-    margin-bottom: 10px;
-  }
-
-  .chart-panel {
-    min-height: 260px;
-  }
-
-  .chart-wrap {
-    height: 240px;
-  }
-
-  .chart-wrap.tall {
-    height: 350px;
-  }
-
-  .summary-matrix {
-    font-size: 0.7rem;
-  }
-
-  .summary-matrix th,
-  .summary-matrix td {
-    padding: 8px;
-  }
-
-  .pagination {
-    gap: 4px;
-  }
-
-  .pagination select {
-    width: 100%;
-    height: 36px;
-    margin: 4px 0;
-  }
-
-  .page-size-label {
-    width: 100%;
-  }
-
-  .page-info {
-    min-width: auto;
-    padding: 0 4px;
-  }
-
-  .page-btn {
-    min-width: 34px;
-    height: 34px;
-  }
-
-  .footer {
-    font-size: 0.62rem;
-    padding: 16px 6px 6px;
-  }
-}
-
-/* =========================
-   iOS / MOBILE COMPACT FIX
-   Prevent Safari automatic text enlargement
-   ========================= */
-html {
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
+  .actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+  .actions button { width: 100%; justify-content: center; }
+  .statusbar { flex-direction: column; align-items: flex-start; gap: 5px; }
+  #lastUpdated { width: 100%; overflow-wrap: anywhere; }
+  .filters { padding: 12px; }
+  .filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .filter-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .filter-actions button { width: 100%; justify-content: center; }
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .card { padding: 13px; }
+  .value { font-size: 1.45rem; }
+  .charts-grid { grid-template-columns: 1fr; gap: 12px; }
+  .panel { padding: 12px; min-width: 0; }
+  .chart-panel { min-height: 280px; }
+  .chart-wrap { height: 250px; }
+  .chart-wrap.tall { height: 330px; }
+  .panel h2 { font-size: 0.85rem; line-height: 1.35; }
+  .table-wrap { width: 100%; -webkit-overflow-scrolling: touch; }
+  table { font-size: 0.7rem; }
+  th, td { padding: 8px; }
+  .tabbar { overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }
+  .tab { flex: 0 0 auto; padding: 10px 12px; }
+  .records-footer { flex-direction: column; align-items: stretch; }
+  #recordCount { line-height: 1.5; }
+  .pagination { width: 100%; justify-content: flex-start; }
 }
 
 @media (max-width: 480px) {
-  .header {
-    margin-bottom: 12px;
-  }
-
-  .header-left {
-    gap: 10px;
-  }
-
-  h1 {
-    font-size: 1.05rem !important;
-  }
-
-  .subtitle {
-    font-size: 0.75rem !important;
-  }
-
-  /* Keep the two main actions compact and side-by-side */
-  .actions {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 8px;
-  }
-
-  .actions button {
-    min-height: 38px;
-    padding: 8px 6px;
-    font-size: 0.75rem;
-  }
-
-  .statusbar {
-    padding: 9px 12px;
-    font-size: 0.72rem;
-    margin-bottom: 12px;
-  }
-
-  .filters {
-    padding: 12px;
-    margin-bottom: 12px;
-  }
-
-  .filter-grid {
-    gap: 10px;
-  }
-
-  label {
-    font-size: 0.68rem;
-    margin-bottom: 4px;
-  }
-
-  select, input {
-    height: 38px;
-    font-size: 0.8rem;
-  }
-
-  .filter-actions button {
-    min-height: 38px;
-    font-size: 0.75rem;
-  }
+  .container { padding: 8px; }
+  .header-left { align-items: flex-start; }
+  .logo, .logo-placeholder { width: 40px; height: 40px; border-radius: 8px; }
+  h1 { font-size: 1rem; }
+  .actions { grid-template-columns: 1fr; }
+  button, .file-btn { min-height: 42px; padding: 9px 10px; font-size: 0.75rem; }
+  .statusbar { padding: 9px 10px; font-size: 0.68rem; }
+  .filter-grid { grid-template-columns: 1fr; }
+  .filter-actions { grid-template-columns: 1fr 1fr; }
+  .cards { grid-template-columns: 1fr; }
+  .card { padding: 14px; }
+  .card:hover { transform: none; }
+  .value { font-size: 1.6rem; }
+  .panel { padding: 10px; }
+  .panel h2 { font-size: 0.8rem; margin-bottom: 10px; }
+  .chart-panel { min-height: 260px; }
+  .chart-wrap { height: 240px; }
+  .chart-wrap.tall { height: 350px; }
+  .summary-matrix { font-size: 0.7rem; }
+  .summary-matrix th, .summary-matrix td { padding: 8px; }
+  .pagination { gap: 4px; }
+  .pagination select { width: 100%; height: 38px; margin: 4px 0; }
+  .page-size-label { width: 100%; }
+  .page-info { min-width: auto; padding: 0 4px; }
+  .page-btn { min-width: 36px; height: 36px; }
+  .footer { font-size: 0.62rem; padding: 16px 6px calc(6px + env(safe-area-inset-bottom)); }
 }
-
-
-/* =====================================================
-   FINAL COMPACT iPHONE LAYOUT
-   This block intentionally overrides earlier mobile rules.
-   ===================================================== */
-@media screen and (max-width: 480px) {
-  html, body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-  }
-
-  .container {
-    padding: 10px !important;
-  }
-
-  .header {
-    gap: 10px !important;
-    margin-bottom: 10px !important;
-  }
-
-  .header-left {
-    gap: 10px !important;
-  }
-
-  .logo {
-    width: 42px !important;
-    height: 42px !important;
-  }
-
-  h1 {
-    font-size: 1rem !important;
-    line-height: 1.2 !important;
-  }
-
-  .subtitle {
-    font-size: .72rem !important;
-    margin-top: 2px !important;
-  }
-
-  /* Main buttons: two compact buttons */
-  .actions {
-    width: 100% !important;
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 8px !important;
-  }
-
-  .actions button {
-    width: 100% !important;
-    min-height: 40px !important;
-    padding: 8px 6px !important;
-    font-size: .72rem !important;
-    white-space: nowrap;
-  }
-
-  .statusbar {
-    margin-bottom: 10px !important;
-    padding: 10px 12px !important;
-    font-size: .72rem !important;
-    line-height: 1.35 !important;
-  }
-
-  .filters {
-    padding: 12px !important;
-    margin-bottom: 10px !important;
-  }
-
-  /* THIS is the main fix: two filters per row */
-  .filter-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-  }
-
-  .filter-grid > div {
-    min-width: 0;
-  }
-
-  label {
-    font-size: .62rem !important;
-    margin-bottom: 4px !important;
-    letter-spacing: .02em !important;
-  }
-
-  select,
-  input {
-    height: 38px !important;
-    min-width: 0 !important;
-    padding: 0 8px !important;
-    font-size: .78rem !important;
-  }
-
-  .filter-actions {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 8px !important;
-    margin-top: 10px !important;
-  }
-
-  .filter-actions button {
-    width: 100% !important;
-    min-height: 38px !important;
-    padding: 8px !important;
-    font-size: .72rem !important;
-  }
-
-  /* Keep KPI cards compact */
-  .cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    margin-bottom: 10px !important;
-  }
-
-  .card {
-    padding: 12px !important;
-  }
-
-  .card .label {
-    font-size: .65rem !important;
-  }
-
-  .value {
-    font-size: 1.35rem !important;
-  }
-
-  .small {
-    font-size: .62rem !important;
-  }
-
-  .panel {
-    padding: 10px !important;
-    margin-bottom: 10px !important;
-  }
-
-  .chart-wrap {
-    height: 230px !important;
-  }
-
-  .chart-wrap.tall {
-    height: 320px !important;
-  }
-}
-
-/* Very narrow phones */
-@media screen and (max-width: 360px) {
-  .filter-grid,
-  .cards {
-    grid-template-columns: 1fr !important;
-  }
-
-  .actions {
-    grid-template-columns: 1fr !important;
-  }
-}
-
 
 /* =========================
-   MAIN MODULE NAVIGATION
+   MAIN MODULE TABS
    ========================= */
 .main-module-tabs {
-  display: flex;
-  gap: 10px;
-  margin: 14px 0;
-  padding: 6px;
-  background: rgba(255,255,255,.55);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: var(--shadow);
+  display:flex; gap:8px; margin:0 0 16px; padding:6px;
+  background:rgba(255,255,255,.72); border:1px solid var(--line);
+  border-radius:var(--radius); box-shadow:var(--shadow);
 }
-
 .main-module-tab {
-  flex: 1;
-  border: 0;
-  border-radius: 10px;
-  padding: 13px 18px;
-  font-weight: 700;
-  cursor: pointer;
-  background: transparent;
-  color: var(--muted);
+  flex:1; justify-content:center; background:transparent; color:#64748b;
+  border:1px solid transparent; min-height:44px;
 }
-
+.main-module-tab:hover { background:#f8fafc; color:#1e293b; }
 .main-module-tab.active-main-module {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: #fff;
-  box-shadow: 0 5px 14px rgba(37,99,235,.22);
+  background:var(--primary); color:#fff; box-shadow:0 4px 12px rgba(29,78,216,.20);
 }
 
-@media (max-width: 480px) {
-  .main-module-tabs {
-    gap: 6px;
-    padding: 5px;
-    margin: 10px 0;
-  }
-  .main-module-tab {
-    font-size: .68rem;
-    padding: 10px 6px;
-    line-height: 1.25;
-  }
+/* Service Request summary */
+.service-name-btn {
+  border:0; background:transparent; color:var(--primary); padding:0;
+  font:inherit; font-weight:700; cursor:pointer; text-align:left;
+}
+.service-name-btn:hover { text-decoration:underline; background:transparent; }
+.success-count { color:#067a56; font-weight:800; }
+.failed-count { color:#b91c1c; font-weight:800; }
+.total-count { font-weight:800; }
+.service-table-note { margin:0 0 10px; color:var(--muted); font-size:.72rem; }
+
+/* Modal */
+.modal-overlay {
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:rgba(15,23,42,.48); padding:20px;
+  align-items:center; justify-content:center;
+}
+.modal-overlay.show { display:flex; }
+.modal-card {
+  width:min(1180px,100%); max-height:min(84vh,900px);
+  background:#fff; border-radius:16px; box-shadow:0 24px 70px rgba(15,23,42,.28);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.modal-header {
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:16px 18px; border-bottom:1px solid var(--line);
+}
+.modal-header h3 { margin:0; font-size:1rem; color:#1e293b; }
+.modal-close {
+  background:#f1f5f9; color:#334155; min-width:36px; height:36px;
+  padding:0; justify-content:center; font-size:1.1rem;
+}
+.modal-close:hover { background:#e2e8f0; }
+.modal-body { padding:14px 18px 18px; overflow:auto; }
+.modal-meta { color:var(--muted); font-size:.75rem; margin-bottom:10px; }
+
+@media (max-width:768px) {
+  .main-module-tabs { margin-bottom:12px; }
+  .main-module-tab { font-size:.72rem; padding:8px 6px; }
+  .modal-overlay { padding:8px; }
+  .modal-card { max-height:90vh; border-radius:12px; }
+  .modal-header { padding:12px; }
+  .modal-body { padding:10px 12px 12px; }
 }
 
 </style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
 </head>
 <body>
 <div class="container">
   <div class="header">
     <div class="header-left">
-      <img class="logo" src="Artboard 1 copy.png" alt="Pan Asia Bank Logo">
+      <div class="logo-placeholder" id="logoFallback">PA</div>
       <div>
         <h1>Pan Asia EZY Registration Dashboard</h1>
         <div class="subtitle">Build for More</div>
       </div>
     </div>
     <div class="actions">
-      <button onclick="refreshData()">↻ Sync Google Sheet </button>
-      <button class="secondary" onclick="downloadCSV()">Export Filtered Detailes</button>
+      <button onclick="refreshData()">↻ Sync Google Sheet</button>
+      <button class="secondary" onclick="downloadCSV()">Export Filtered Details</button>
     </div>
   </div>
 
-  <!-- Main Dashboard Modules -->
-  <div class="main-module-tabs">
-    <button id="registrationModuleBtn" class="main-module-tab active-main-module"
-      onclick="switchMainModule('registration')">👤 User Registrations</button>
-    <button id="serviceModuleBtn" class="main-module-tab"
-      onclick="switchMainModule('services')">🛠 Service Requests Progress</button>
+  <div class="main-module-tabs" role="tablist" aria-label="Dashboard modules">
+    <button id="registrationModuleBtn" class="main-module-tab active-main-module" onclick="switchMainModule('registration')">👤 User Registrations</button>
+    <button id="serviceModuleBtn" class="main-module-tab" onclick="switchMainModule('services')">🛠 Service Requests</button>
   </div>
 
   <div id="registrationModule">
   <div class="statusbar">
-    <div><span id="statusDot" class="dot"></span><span id="sourceStatus">Waiting for Google Sheets data…</span></div>
+    <div><span id="statusDot" class="dot" role="status" aria-live="polite"></span><span id="sourceStatus">Waiting for Google Sheets data…</span></div>
     <div id="lastUpdated">Last updated: —</div>
   </div>
 
   <div class="filters">
     <div class="filter-grid">
-      <div><label>Created Date From</label><input type="date" id="dateFrom"></div>
-      <div><label>Created Date To</label><input type="date" id="dateTo"></div>
-      <div><label>Customer Status</label><select id="customerStatus"><option value="">All</option></select></div>
-      <div><label>Registration Type</label><select id="registrationType"><option value="">All</option></select></div>
-      <div><label>IB Channel Status</label><select id="ibStatus"><option value="">All</option></select></div>
-      <div><label>MB Channel Status</label><select id="mbStatus"><option value="">All</option></select></div>
-      <div><label>OB Legacy Migration</label><select id="obStatus"><option value="">All</option></select></div>
-      <div><label>Search CIF / Name / ID</label><input id="search" placeholder="Type to search…" autocomplete="off"></div>
+      <div><label for="dateFrom">Created Date From</label><input type="date" id="dateFrom"></div>
+      <div><label for="dateTo">Created Date To</label><input type="date" id="dateTo"></div>
+      <div><label for="customerStatus">Customer Status</label><select id="customerStatus"><option value="">All</option></select></div>
+      <div><label for="registrationType">Registration Type</label><select id="registrationType"><option value="">All</option></select></div>
+      <div><label for="ibStatus">IB Channel Status</label><select id="ibStatus"><option value="">All</option></select></div>
+      <div><label for="mbStatus">MB Channel Status</label><select id="mbStatus"><option value="">All</option></select></div>
+      <div><label for="obStatus">OB Legacy Migration</label><select id="obStatus"><option value="">All</option></select></div>
+      <div><label for="search">Search CIF / Name / ID</label><input id="search" placeholder="Type to search…" autocomplete="off" maxlength="100"></div>
     </div>
     <div class="filter-actions">
       <button onclick="applyFilters()">Apply Filters</button>
@@ -932,37 +398,31 @@ html {
 
   <!-- KPI Cards -->
   <div class="cards kpi-cards">
-
     <div class="card">
       <div class="label">Total User Base</div>
       <div class="value" id="total">0</div>
       <div class="small">Total current filtered users</div>
     </div>
-
     <div class="card">
       <div class="label">Active User Base</div>
       <div class="value" id="active">0</div>
       <div class="small">Customer Status = Active</div>
     </div>
-
     <div class="card">
       <div class="label">Locked User Base</div>
       <div class="value" id="locked">0</div>
       <div class="small">Customer Status = Locked</div>
     </div>
-
     <div class="card">
       <div class="label">Initiated User Base</div>
       <div class="value" id="initiated">0</div>
       <div class="small">Registered but not activated</div>
     </div>
-
     <div class="card">
       <div class="label">Activation Rate</div>
       <div class="value" id="rate">0%</div>
-      <div class="small">Active User Base / (Active / Initiated)</div>
+      <div class="small">Active ÷ (Active + Initiated)</div>
     </div>
-
   </div>
 
   <div class="charts-grid">
@@ -974,14 +434,7 @@ html {
       <h2>Registration Type Summary</h2>
       <div class="table-wrap">
         <table id="regSummary">
-          <thead>
-            <tr>
-              <th>Registration Type</th>
-              <th>Registered</th>
-              <th>Activated</th>
-              <th>Activation %</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Registration Type</th><th>Registered</th><th>Activated</th><th>Activation %</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -990,16 +443,13 @@ html {
       <h2>Customer Status</h2>
       <div class="chart-wrap"><canvas id="statusChart"></canvas></div>
     </div>
-
     <div class="panel chart-panel">
       <h2>Top 10 Branches by Registration</h2>
       <div class="chart-wrap tall"><canvas id="branchChart"></canvas></div>
     </div>
     <div class="panel chart-panel">
       <h2>Top 10 Branches by Activations</h2>
-      <div class="chart-wrap tall">
-        <canvas id="branchActivationChart"></canvas>
-      </div>
+      <div class="chart-wrap tall"><canvas id="branchActivationChart"></canvas></div>
     </div>
     <div class="panel chart-panel">
       <h2>Daily Registration Progress</h2>
@@ -1029,14 +479,7 @@ html {
       <div class="migration-status-table" style="margin-top:14px">
         <div class="table-wrap">
           <table id="migrationSummary" class="summary-matrix">
-            <thead>
-              <tr>
-                <th>Channel</th>
-                <th>COMPLETED</th>
-                <th>FAILED</th>
-                <th>N/A</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Channel</th><th>COMPLETED</th><th>FAILED</th><th>N/A</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -1049,15 +492,7 @@ html {
       <h2>Channel Summary</h2>
       <div class="table-wrap">
         <table id="channelSummary" class="summary-matrix">
-          <thead>
-            <tr>
-              <th>Channel</th>
-              <th>Active</th>
-              <th>Initiated</th>
-              <th>N/A</th>
-              <th>To be activated</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Channel</th><th>Active</th><th>Initiated</th><th>N/A</th><th>To be activated</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -1109,115 +544,106 @@ html {
 
   </div><!-- /registrationModule -->
 
-  <!-- ================= SERVICE REQUESTS MODULE ================= -->
+  <!-- ================= SERVICE REQUESTS ================= -->
   <div id="serviceModule" style="display:none">
 
     <div class="statusbar">
-      <div><span id="serviceStatusDot" class="dot"></span><span id="serviceSourceStatus">Waiting for Service Requests data…</span></div>
+      <div><span id="serviceStatusDot" class="dot warn"></span><span id="serviceSourceStatus">Waiting for Service Requests data…</span></div>
       <div id="serviceLastUpdated">Last updated: —</div>
     </div>
 
     <div class="filters">
       <div class="filter-grid">
-        <div><label>Created Date From</label><input type="date" id="serviceDateFrom"></div>
-        <div><label>Created Date To</label><input type="date" id="serviceDateTo"></div>
-        <div><label>Request Status</label><select id="serviceStatus"><option value="">All</option></select></div>
-        <div><label id="serviceTypeLabel">Service Type</label><select id="serviceType"><option value="">All</option></select></div>
-        <div><label>Search</label><input id="serviceSearch" placeholder="Search service requests…" autocomplete="off"></div>
+        <div><label for="serviceDateFrom">Created Date From</label><input type="date" id="serviceDateFrom"></div>
+        <div><label for="serviceDateTo">Created Date To</label><input type="date" id="serviceDateTo"></div>
+        <div><label for="serviceStatus">Status</label><select id="serviceStatus"><option value="">All</option></select></div>
+        <div><label for="serviceType">Service Type</label><select id="serviceType"><option value="">All</option></select></div>
+        <div><label for="serviceSearch">Search</label><input id="serviceSearch" placeholder="Search type / name / details…" autocomplete="off"></div>
       </div>
       <div class="filter-actions">
         <button onclick="applyServiceFilters()">Apply Filters</button>
         <button class="secondary" onclick="clearServiceFilters()">Clear</button>
+        <button class="secondary" onclick="refreshServiceData()">↻ Sync Service Requests</button>
       </div>
     </div>
 
-    <div class="cards kpi-cards">
-      <div class="card">
-        <div class="label">Total Service Requests</div>
-        <div class="value" id="serviceTotal">0</div>
-        <div class="small">Total current filtered requests</div>
+    <div class="panel" style="margin-bottom:16px">
+      <h2>Service Request Type & Name Breakdown</h2>
+      <div class="service-table-note">
+        Click a <strong>Service Request Name</strong> to view all relevant Service Request Records.
       </div>
-      <div class="card">
-        <div class="label">Completed / Closed</div>
-        <div class="value" id="serviceCompleted">0</div>
-        <div class="small">Completed or resolved requests</div>
-      </div>
-      <div class="card">
-        <div class="label">Pending / Open</div>
-        <div class="value" id="servicePending">0</div>
-        <div class="small">Pending, initiated or open</div>
-      </div>
-      <div class="card">
-        <div class="label">In Progress</div>
-        <div class="value" id="serviceInProgress">0</div>
-        <div class="small">Currently processing</div>
-      </div>
-      <div class="card">
-        <div class="label">Completion Rate</div>
-        <div class="value" id="serviceCompletionRate">0%</div>
-        <div class="small">Completed / Total filtered requests</div>
+      <div class="table-wrap">
+        <table id="serviceBreakdownTable" class="summary-matrix">
+          <thead>
+            <tr>
+              <th>Service Request Type</th>
+              <th>Service Request Name</th>
+              <th>Successful</th>
+              <th>Failed</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
 
     <div class="charts-grid">
       <div class="panel chart-panel">
-        <h2>Service Request Progress by Status</h2>
-        <div class="chart-wrap"><canvas id="serviceStatusChart"></canvas></div>
-      </div>
-      <div class="panel chart-panel">
-        <h2 id="serviceTypeChartTitle">Service Request Distribution</h2>
-        <div class="chart-wrap"><canvas id="serviceTypeChart"></canvas></div>
-      </div>
-      <div class="panel chart-panel">
         <h2>Daily Service Request Progress</h2>
         <div class="chart-wrap"><canvas id="serviceDailyChart"></canvas></div>
+        <div class="chart-note">Daily Successful and Failed service requests</div>
+      </div>
+
+      <div class="panel chart-panel">
+        <h2>Service Request Status Distribution</h2>
+        <div class="chart-wrap"><canvas id="serviceStatusChart"></canvas></div>
       </div>
     </div>
 
-    <div class="panel">
-      <div class="tabbar">
-        <button class="tab active-tab" onclick="showServiceTab('serviceRecords', this)">Service Request Records</button>
-        <button class="tab" onclick="showServiceTab('serviceFields', this)">Data Source Fields</button>
-      </div>
-
-      <div id="serviceRecords">
-        <div class="table-wrap">
-          <table id="serviceRecordsTable"><thead></thead><tbody></tbody></table>
-        </div>
-        <div class="records-footer">
-          <div id="serviceRecordCount" class="small"></div>
-          <div class="pagination">
-            <label for="servicePageSize" class="page-size-label">Rows per page</label>
-            <select id="servicePageSize" onchange="changeServicePageSize(this.value)">
-              <option value="25" selected>25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-              <option value="250">250</option>
-            </select>
-            <button class="secondary page-btn" onclick="goToServicePage(1)">«</button>
-            <button class="secondary page-btn" onclick="goToServicePage(serviceCurrentPage - 1)">‹</button>
-            <span id="servicePageInfo" class="page-info">Page 1 of 1</span>
-            <button class="secondary page-btn" onclick="goToServicePage(serviceCurrentPage + 1)">›</button>
-            <button class="secondary page-btn" onclick="goToServicePage(serviceTotalPages())">»</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="serviceFields" style="display:none">
-        <div class="small" style="margin-bottom:10px">Live Service Requests Google Sheet source (first 100 filtered rows shown).</div>
-        <div class="table-wrap"><table id="serviceSourceTable"><thead></thead><tbody></tbody></table></div>
-      </div>
-    </div>
-
-    <div class="footer">Service Requests Progress Dashboard • Google Sheets CSV live sync • Filters run in the browser</div>
+    <div class="footer">Service Requests Progress • Google Sheets CSV live sync • Filters run in the browser</div>
   </div><!-- /serviceModule -->
 
-  <div class="footer">Pan Asia EZY Dashboard • User Registrations & Service Requests • Google Sheets CSV live sync</div>
+  <div class="footer">Pan Asia EZY Dashboard • User Registrations & Service Requests</div>
+
+  <!-- Service Request Records Modal -->
+  <div id="serviceRecordsModal" class="modal-overlay" onclick="closeServiceRecordsModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <h3 id="serviceModalTitle">Service Request Records</h3>
+          <div id="serviceModalMeta" class="modal-meta"></div>
+        </div>
+        <button class="modal-close" onclick="closeServiceRecordsModal()" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="table-wrap">
+          <table id="serviceModalTable">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
+"use strict";
+
+/* ---------- Trusted source allow-list (defense in depth) ---------- */
 const GOOGLE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1EykOgIlIyQJrjRdICoBIuhIchN8GA7Vvs28iMuBdL9ZPtbTwIDGQKHpQue6eZvpAb9VXxjeZP1Q2/pub?gid=1900187773&single=true&output=csv";
 const SERVICE_REQUEST_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTbGphbd2MSiq1zjGxR-TU5mKuzpv1zGqSQ9-WJdPAUMDq5XJ-S8PYRRsKLAoawCgcgMVPH72mHI21v/pub?output=csv";
+const ALLOWED_HOSTS = ["docs.google.com"];
+
+function isUrlAllowed(urlStr) {
+  try {
+    const u = new URL(urlStr);
+    return u.protocol === "https:" && ALLOWED_HOSTS.includes(u.hostname);
+  } catch {
+    return false;
+  }
+}
 
 const CANONICAL_FIELDS = [
   "CIF Number","Username","Title","Customer Name","Customer Status","Customer Type",
@@ -1230,9 +656,15 @@ const CANONICAL_FIELDS = [
   "Data Migration Status","MB Inactivation Status","OB Legacy Data Migration Status"
 ];
 
+/* Sensitive fields we never render in the source-preview / all-fields tab,
+   even though they may exist in the underlying sheet. */
+const SENSITIVE_FIELDS = new Set([
+  "Mobile Number","E mail","Address","Date of Birth","Primary Account Number","Username"
+]);
+
 const CHART_COLORS = [
-  "#2563eb","#10b981","#f59e0b","#ef4444","#8b5cf6",
-  "#06b6d4","#ec4899","#84cc16","#f97316","#6366f1"
+  "#1d4ed8","#0f9d6e","#d97706","#dc2626","#7c3aed",
+  "#0ea5e9","#db2777","#65a30d","#ea580c","#4f46e5"
 ];
 
 let DATA = [];
@@ -1242,6 +674,7 @@ let currentPage = 1;
 let pageSize = 25;
 let searchDebounce = null;
 let isRendering = false;
+let inFlightController = null;
 
 /* ---------- Utils ---------- */
 function keyNorm(s) {
@@ -1256,6 +689,8 @@ function keyNorm(s) {
 function normalize(r) {
   const out = {};
   Object.keys(r || {}).forEach(rawKey => {
+    // Guard against prototype-pollution style keys from a malformed/hostile CSV
+    if (rawKey === "__proto__" || rawKey === "constructor" || rawKey === "prototype") return;
     const match = CANONICAL_FIELDS.find(f => keyNorm(f) === keyNorm(rawKey));
     const key = match || String(rawKey).replace(/^\uFEFF/, "").trim();
     out[key] = r[rawKey] == null ? "" : String(r[rawKey]).trim();
@@ -1276,8 +711,19 @@ function fillSelect(id, field) {
   if ([...el.options].some(o => o.value === old)) el.value = old;
 }
 
+/* Escapes text for safe HTML insertion. Every dynamic value rendered via
+   innerHTML in this file must pass through esc() first — this is the
+   single choke point that prevents stored/reflected XSS from sheet data. */
 function esc(s) {
   return String(s).replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+}
+
+/* Neutralizes leading =, +, -, @, tab and CR so a cell can never be
+   interpreted as a formula by Excel/Sheets when opened (CSV/Formula
+   Injection protection) on export. */
+function sanitizeForCsv(value) {
+  const v = String(value ?? "");
+  return /^[=+\-@\t\r]/.test(v) ? "'" + v : v;
 }
 
 function parseDashboardDate(s) {
@@ -1337,7 +783,7 @@ function applyFilters() {
   const ib = document.getElementById("ibStatus").value;
   const mb = document.getElementById("mbStatus").value;
   const ob = document.getElementById("obStatus").value;
-  const q = document.getElementById("search").value.toLowerCase().trim();
+  const q = document.getElementById("search").value.toLowerCase().trim().slice(0, 100);
 
   FILTERED = DATA.filter(r => {
     const d = dateOnly(r["Created Date Time"]);
@@ -1361,7 +807,6 @@ function clearFilters() {
   applyFilters();
 }
 
-/* Debounced search + auto-apply on selects/dates */
 document.getElementById("search").addEventListener("input", () => {
   clearTimeout(searchDebounce);
   searchDebounce = setTimeout(applyFilters, 280);
@@ -1378,8 +823,7 @@ document.getElementById("search").addEventListener("input", () => {
 const valueLabelsPlugin = {
   id: "valueLabels",
   afterDatasetsDraw(chart) {
-    const type = chart.config.type;
-    if (type !== "bar") return;
+    if (chart.config.type !== "bar") return;
     const ctx = chart.ctx;
     ctx.save();
     ctx.font = "600 11px Inter, system-ui, sans-serif";
@@ -1393,12 +837,10 @@ const valueLabelsPlugin = {
         const text = Number(val).toLocaleString();
         const pos = el.tooltipPosition();
         if (chart.options.indexAxis === "y") {
-          ctx.textAlign = "left";
-          ctx.textBaseline = "middle";
+          ctx.textAlign = "left"; ctx.textBaseline = "middle";
           ctx.fillText(text, pos.x + 6, pos.y);
         } else {
-          ctx.textAlign = "center";
-          ctx.textBaseline = "bottom";
+          ctx.textAlign = "center"; ctx.textBaseline = "bottom";
           ctx.fillText(text, pos.x, pos.y - 4);
         }
       });
@@ -1406,20 +848,13 @@ const valueLabelsPlugin = {
     ctx.restore();
   }
 };
-Chart.register(valueLabelsPlugin);
-
-function destroyChart(id) {
-  if (charts[id]) {
-    charts[id].destroy();
-    delete charts[id];
-  }
-}
+if (typeof Chart !== "undefined") Chart.register(valueLabelsPlugin);
 
 function chartBaseOptions() {
   return {
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 280 },
+    animation: { duration: 260 },
     layout: { padding: { top: 18, right: 10, left: 4, bottom: 2 } },
     plugins: {
       legend: { position: "bottom", labels: { boxWidth: 10, usePointStyle: true, font: { size: 11 } } },
@@ -1439,9 +874,7 @@ function doughnutLegendLabels(chart) {
     text: `${label} — ${Number(data[i] || 0).toLocaleString()}`,
     fillStyle: chart.data.datasets[0].backgroundColor?.[i],
     strokeStyle: chart.data.datasets[0].borderColor?.[i],
-    lineWidth: 0,
-    hidden: false,
-    index: i
+    lineWidth: 0, hidden: false, index: i
   }));
 }
 
@@ -1459,17 +892,10 @@ function makeBarChart(id, labels, data, opts = {}) {
   }
   charts[id] = new Chart(el, {
     type: "bar",
-    data: {
-      labels,
-      datasets: [{
-        label: opts.label || "Records",
-        data,
-        borderRadius: 5,
-        backgroundColor: CHART_COLORS[0] + "cc",
-        borderColor: CHART_COLORS[0],
-        borderWidth: 0
-      }]
-    },
+    data: { labels, datasets: [{
+      label: opts.label || "Records", data, borderRadius: 5,
+      backgroundColor: CHART_COLORS[0] + "cc", borderColor: CHART_COLORS[0], borderWidth: 0
+    }]},
     options: {
       ...chartBaseOptions(),
       indexAxis: horizontal ? "y" : "x",
@@ -1494,24 +920,13 @@ function makeDoughnut(id, labels, data) {
   }
   charts[id] = new Chart(el, {
     type: "doughnut",
-    data: {
-      labels,
-      datasets: [{
-        data,
-        backgroundColor: labels.map((_, i) => CHART_COLORS[i % CHART_COLORS.length] + "e6"),
-        borderWidth: 0
-      }]
-    },
+    data: { labels, datasets: [{
+      data, backgroundColor: labels.map((_, i) => CHART_COLORS[i % CHART_COLORS.length] + "e6"), borderWidth: 0
+    }]},
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: { duration: 280 },
-      cutout: "58%",
+      responsive: true, maintainAspectRatio: false, animation: { duration: 260 }, cutout: "58%",
       plugins: {
-        legend: {
-          position: "bottom",
-          labels: { boxWidth: 10, usePointStyle: true, font: { size: 11 }, generateLabels: doughnutLegendLabels }
-        },
+        legend: { position: "bottom", labels: { boxWidth: 10, usePointStyle: true, font: { size: 11 }, generateLabels: doughnutLegendLabels } },
         tooltip: { callbacks: { label: ctx => `${ctx.label}: ${Number(ctx.raw || 0).toLocaleString()}` } }
       }
     }
@@ -1533,25 +948,16 @@ function categoricalChart(id, field, maxItems = 12) {
 function renderCharts() {
   if (typeof Chart === "undefined") return;
 
-  // Registration Type
   const types = countBy("Registration Type");
   makeBarChart("registrationChart", Object.keys(types), Object.values(types));
 
-  // Customer Status
   const statuses = countBy("Customer Status");
   makeDoughnut("statusChart", Object.keys(statuses), Object.values(statuses));
 
-  // Daily
   const days = {};
-  FILTERED.forEach(r => {
-    const k = dateOnly(r["Created Date Time"]);
-    if (k) days[k] = (days[k] || 0) + 1;
-  });
+  FILTERED.forEach(r => { const k = dateOnly(r["Created Date Time"]); if (k) days[k] = (days[k] || 0) + 1; });
   const dayKeys = Object.keys(days).sort();
-  const dayLabels = dayKeys.map(k => {
-    const d = new Date(k + "T00:00:00");
-    return d.toLocaleDateString(undefined, { day: "2-digit", month: "short" });
-  });
+  const dayLabels = dayKeys.map(k => new Date(k + "T00:00:00").toLocaleDateString(undefined, { day: "2-digit", month: "short" }));
   const dayData = dayKeys.map(k => days[k]);
   if (charts.dailyChart) {
     charts.dailyChart.data.labels = dayLabels;
@@ -1560,34 +966,22 @@ function renderCharts() {
   } else {
     charts.dailyChart = new Chart(document.getElementById("dailyChart"), {
       type: "line",
-      data: {
-        labels: dayLabels,
-        datasets: [{
-          label: "Registrations",
-          data: dayData,
-          tension: 0.3,
-          fill: false,
-          pointRadius: 2.5,
-          pointHoverRadius: 5,
-          borderWidth: 2,
-          borderColor: CHART_COLORS[0],
-          backgroundColor: CHART_COLORS[0]
-        }]
-      },
+      data: { labels: dayLabels, datasets: [{
+        label: "Registrations", data: dayData, tension: 0.3, fill: false,
+        pointRadius: 2.5, pointHoverRadius: 5, borderWidth: 2,
+        borderColor: CHART_COLORS[0], backgroundColor: CHART_COLORS[0]
+      }]},
       options: {
         ...chartBaseOptions(),
         interaction: { mode: "index", intersect: false },
         plugins: {
-          ...chartBaseOptions().plugins,
-          legend: { display: false },
+          ...chartBaseOptions().plugins, legend: { display: false },
           tooltip: {
             callbacks: {
               title: items => {
                 if (!items.length) return "";
                 const k = dayKeys[items[0].dataIndex];
-                return new Date(k + "T00:00:00").toLocaleDateString(undefined, {
-                  weekday: "short", day: "2-digit", month: "short", year: "numeric"
-                });
+                return new Date(k + "T00:00:00").toLocaleDateString(undefined, { weekday: "short", day: "2-digit", month: "short", year: "numeric" });
               },
               label: ctx => ` Registrations: ${Number(ctx.raw || 0).toLocaleString()}`
             }
@@ -1601,12 +995,8 @@ function renderCharts() {
     });
   }
 
-  // Monthly
   const months = {};
-  FILTERED.forEach(r => {
-    const k = monthKey(r["Created Date Time"]);
-    if (k) months[k] = (months[k] || 0) + 1;
-  });
+  FILTERED.forEach(r => { const k = monthKey(r["Created Date Time"]); if (k) months[k] = (months[k] || 0) + 1; });
   const monthKeys = Object.keys(months).sort();
   if (charts.monthlyChart) {
     charts.monthlyChart.data.labels = monthKeys.map(monthLabel);
@@ -1615,32 +1005,18 @@ function renderCharts() {
   } else {
     charts.monthlyChart = new Chart(document.getElementById("monthlyChart"), {
       type: "line",
-      data: {
-        labels: monthKeys.map(monthLabel),
-        datasets: [{
-          label: "Registrations",
-          data: monthKeys.map(k => months[k]),
-          tension: 0.3,
-          fill: false,
-          pointRadius: 3,
-          borderWidth: 2,
-          borderColor: CHART_COLORS[1],
-          backgroundColor: CHART_COLORS[1]
-        }]
-      },
+      data: { labels: monthKeys.map(monthLabel), datasets: [{
+        label: "Registrations", data: monthKeys.map(k => months[k]), tension: 0.3, fill: false,
+        pointRadius: 3, borderWidth: 2, borderColor: CHART_COLORS[1], backgroundColor: CHART_COLORS[1]
+      }]},
       options: {
-        ...chartBaseOptions(),
-        interaction: { mode: "index", intersect: false },
-        plugins: {
-          ...chartBaseOptions().plugins,
-          legend: { display: false },
-          tooltip: { callbacks: { label: ctx => ` Registrations: ${Number(ctx.raw || 0).toLocaleString()}` } }
-        }
+        ...chartBaseOptions(), interaction: { mode: "index", intersect: false },
+        plugins: { ...chartBaseOptions().plugins, legend: { display: false },
+          tooltip: { callbacks: { label: ctx => ` Registrations: ${Number(ctx.raw || 0).toLocaleString()}` } } }
       }
     });
   }
 
-  // Channel comparison
   const channelStatuses = new Set();
   FILTERED.forEach(r => {
     channelStatuses.add(String(r["IB channel status"] || "Blank").trim() || "Blank");
@@ -1657,72 +1033,38 @@ function renderCharts() {
   } else {
     charts.channelChart = new Chart(document.getElementById("channelChart"), {
       type: "bar",
-      data: {
-        labels: channelLabels,
-        datasets: [
-          { label: "IB Channel", data: ib, borderRadius: 4, backgroundColor: CHART_COLORS[0] + "cc" },
-          { label: "MB Channel", data: mb, borderRadius: 4, backgroundColor: CHART_COLORS[1] + "cc" }
-        ]
-      },
-      options: {
-        ...chartBaseOptions(),
-        plugins: { ...chartBaseOptions().plugins, valueLabels: {} }
-      }
+      data: { labels: channelLabels, datasets: [
+        { label: "IB Channel", data: ib, borderRadius: 4, backgroundColor: CHART_COLORS[0] + "cc" },
+        { label: "MB Channel", data: mb, borderRadius: 4, backgroundColor: CHART_COLORS[1] + "cc" }
+      ]},
+      options: { ...chartBaseOptions(), plugins: { ...chartBaseOptions().plugins, valueLabels: {} } }
     });
   }
 
-  // Migration doughnut
   const migration = countBy("OB Legacy Data Migration Status");
   makeDoughnut("migrationChart", Object.keys(migration), Object.values(migration));
 
-  // Top branches
   const branches = countBy("Branch Code");
   const topBranches = Object.entries(branches).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 10);
   makeBarChart("branchChart", topBranches.map(x => x[0]), topBranches.map(x => x[1]), { horizontal: true });
-// Top 10 Branches by Activations
-const activatedBranches = {};
 
-FILTERED
-  .filter(r =>
-    String(r["Customer Status"] || "")
-      .trim()
-      .toLowerCase() === "active"
-  )
-  .forEach(r => {
+  const activatedBranches = {};
+  FILTERED
+    .filter(r => String(r["Customer Status"] || "").trim().toLowerCase() === "active")
+    .forEach(r => {
+      const branch = String(r["Branch Code"] || "").trim() || "Blank";
+      activatedBranches[branch] = (activatedBranches[branch] || 0) + 1;
+    });
+  const topActivatedBranches = Object.entries(activatedBranches).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 10);
+  makeBarChart("branchActivationChart", topActivatedBranches.map(x => x[0]), topActivatedBranches.map(x => x[1]), { horizontal: true, label: "Activations" });
 
-    const branch =
-      String(r["Branch Code"] || "").trim() || "Blank";
+  categoricalChart("activityChart", "Activity Status");
 
-    activatedBranches[branch] =
-      (activatedBranches[branch] || 0) + 1;
-  });
-
-const topActivatedBranches =
-  Object.entries(activatedBranches)
-    .sort((a, b) =>
-      b[1] - a[1] || a[0].localeCompare(b[0])
-    )
-    .slice(0, 10);
-
-makeBarChart(
-  "branchActivationChart",
-  topActivatedBranches.map(x => x[0]),
-  topActivatedBranches.map(x => x[1]),
-  {
-    horizontal: true,
-    label: "Activations"
-  }
-);
-  // Categorical
-categoricalChart("activityChart", "Activity Status");
-
-  // Activation channel
   const activationChannel = {
     "IB Activated": FILTERED.filter(r => !!parseDashboardDate(String(r["IB Activated Date Time"] || ""))).length,
     "MB Activated": FILTERED.filter(r => !!parseDashboardDate(String(r["MB Activated Date Time"] || ""))).length
   };
   makeBarChart("activationChannelChart", Object.keys(activationChannel), Object.values(activationChannel));
-
 }
 
 /* ---------- Render ---------- */
@@ -1730,27 +1072,12 @@ function render() {
   if (isRendering) return;
   isRendering = true;
 
-  /* ---------- KPI Calculations ---------- */
-
   const totalUsers = FILTERED.length;
-
-  const activeUsers = FILTERED.filter(r =>
-    String(r["Customer Status"] || "").trim().toLowerCase() === "active"
-  ).length;
-
-  const lockedUsers = FILTERED.filter(r =>
-    String(r["Customer Status"] || "").trim().toLowerCase() === "locked"
-  ).length;
-
-  const initiatedUsers = FILTERED.filter(r =>
-    String(r["Customer Status"] || "").trim().toLowerCase() === "initiated"
-  ).length;
-
-  // Activation Rate = Active User Base ÷ (Active User Base + Initiated User Base)
+  const activeUsers = FILTERED.filter(r => String(r["Customer Status"] || "").trim().toLowerCase() === "active").length;
+  const lockedUsers = FILTERED.filter(r => String(r["Customer Status"] || "").trim().toLowerCase() === "locked").length;
+  const initiatedUsers = FILTERED.filter(r => String(r["Customer Status"] || "").trim().toLowerCase() === "initiated").length;
   const registeredUsers = activeUsers + initiatedUsers;
-  const activationRate = registeredUsers
-    ? (activeUsers / registeredUsers) * 100
-    : 0;
+  const activationRate = registeredUsers ? (activeUsers / registeredUsers) * 100 : 0;
 
   document.getElementById("total").textContent = totalUsers.toLocaleString();
   document.getElementById("active").textContent = activeUsers.toLocaleString();
@@ -1758,7 +1085,6 @@ function render() {
   document.getElementById("initiated").textContent = initiatedUsers.toLocaleString();
   document.getElementById("rate").textContent = activationRate.toFixed(1) + "%";
 
-  // Registration summary
   const types = {};
   FILTERED.forEach(r => {
     const t = r["Registration Type"] || "Blank";
@@ -1771,7 +1097,6 @@ function render() {
     `<tr><td>${esc(t)}</td><td>${v.registered.toLocaleString()}</td><td>${v.activated.toLocaleString()}</td><td>${v.registered ? (v.activated / v.registered * 100).toFixed(1) : 0}%</td></tr>`
   ).join("") || '<tr><td colspan="4" class="empty">No records</td></tr>';
 
-  // Channel summary
   const channelStatuses = ["Active", "Initiated", "N/A", "To be activated"];
   const channelRows = [["IB Channel", "IB channel status"], ["MB Channel", "MB channel status"]];
   document.querySelector("#channelSummary tbody").innerHTML = channelRows.map(([label, field]) => {
@@ -1781,30 +1106,18 @@ function render() {
       const status = channelStatuses.find(s => s.toLowerCase() === raw.toLowerCase()) || "N/A";
       counts[status]++;
     });
-    return `<tr>
-      <td>${esc(label)}</td>
-      <td>${counts["Active"].toLocaleString()}</td>
-      <td>${counts["Initiated"].toLocaleString()}</td>
-      <td>${counts["N/A"].toLocaleString()}</td>
-      <td>${counts["To be activated"].toLocaleString()}</td>
-    </tr>`;
+    return `<tr><td>${esc(label)}</td><td>${counts["Active"].toLocaleString()}</td><td>${counts["Initiated"].toLocaleString()}</td><td>${counts["N/A"].toLocaleString()}</td><td>${counts["To be activated"].toLocaleString()}</td></tr>`;
   }).join("") || '<tr><td colspan="5" class="empty">No records</td></tr>';
 
-  // Migration summary
   const migrationCounts = { "COMPLETED": 0, "FAILED": 0, "N/A": 0 };
   FILTERED.forEach(r => {
     const raw = String(r["OB Legacy Data Migration Status"] ?? "").trim();
     const status = ["COMPLETED", "FAILED", "N/A"].find(s => s.toLowerCase() === raw.toLowerCase()) || "N/A";
     migrationCounts[status]++;
   });
-  document.querySelector("#migrationSummary tbody").innerHTML = `<tr>
-    <td>OB Legacy Migration</td>
-    <td>${migrationCounts["COMPLETED"].toLocaleString()}</td>
-    <td>${migrationCounts["FAILED"].toLocaleString()}</td>
-    <td>${migrationCounts["N/A"].toLocaleString()}</td>
-  </tr>`;
+  document.querySelector("#migrationSummary tbody").innerHTML =
+    `<tr><td>OB Legacy Migration</td><td>${migrationCounts["COMPLETED"].toLocaleString()}</td><td>${migrationCounts["FAILED"].toLocaleString()}</td><td>${migrationCounts["N/A"].toLocaleString()}</td></tr>`;
 
-  // Records table (DocumentFragment for speed)
   const pages = totalPages();
   if (currentPage > pages) currentPage = pages;
   if (currentPage < 1) currentPage = 1;
@@ -1846,9 +1159,7 @@ function render() {
   isRendering = false;
 }
 
-function totalPages() {
-  return Math.max(1, Math.ceil(FILTERED.length / pageSize));
-}
+function totalPages() { return Math.max(1, Math.ceil(FILTERED.length / pageSize)); }
 
 function updatePagination() {
   const pages = totalPages();
@@ -1866,14 +1177,14 @@ function goToPage(page) {
 }
 
 function changePageSize(size) {
-  pageSize = Math.max(1, Number(size) || 25);
+  pageSize = Math.max(1, Math.min(1000, Number(size) || 25));
   currentPage = 1;
   render();
 }
 
 function badge(v) {
   if (!v) return '<span class="badge blank">Blank</span>';
-  const x = v.toLowerCase();
+  const x = String(v).toLowerCase();
   let c = "blank";
   if (x.includes("active") && !x.includes("inactive")) c = "active";
   else if (x.includes("initiated")) c = "initiated";
@@ -1883,13 +1194,11 @@ function badge(v) {
 }
 
 function renderSourcePreview() {
-  const fields = Object.keys(DATA[0] || {});
-  document.querySelector("#sourceTable thead").innerHTML =
-    "<tr>" + fields.map(f => `<th>${esc(f)}</th>`).join("") + "</tr>";
+  // Hide sensitive PII-bearing columns from the raw "Data Source Fields" view
+  const fields = Object.keys(DATA[0] || {}).filter(f => !SENSITIVE_FIELDS.has(f));
+  document.querySelector("#sourceTable thead").innerHTML = "<tr>" + fields.map(f => `<th>${esc(f)}</th>`).join("") + "</tr>";
   document.querySelector("#sourceTable tbody").innerHTML =
-    FILTERED.slice(0, 100).map(r =>
-      "<tr>" + fields.map(f => `<td>${esc(r[f])}</td>`).join("") + "</tr>"
-    ).join("");
+    FILTERED.slice(0, 100).map(r => "<tr>" + fields.map(f => `<td>${esc(r[f])}</td>`).join("") + "</tr>").join("");
 }
 
 function showTab(id, btn) {
@@ -1927,49 +1236,67 @@ function csvParse(text) {
 }
 
 async function refreshData() {
+  if (!isUrlAllowed(GOOGLE_CSV_URL)) {
+    setStatus("Blocked: data source is not on the approved host list", "error");
+    return;
+  }
+
+  // Cancel any in-flight request and cap this one so a stalled network
+  // connection can't hang the UI indefinitely.
+  if (inFlightController) inFlightController.abort();
+  inFlightController = new AbortController();
+  const timeoutId = setTimeout(() => inFlightController.abort(), 20000);
+
   try {
     setStatus("Loading data from Google Sheet (CSV)…", "warn");
     const url = GOOGLE_CSV_URL + (GOOGLE_CSV_URL.includes("?") ? "&" : "?") + "_ts=" + Date.now();
     const res = await fetch(url, {
       method: "GET",
       cache: "no-store",
-      redirect: "follow"
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+      signal: inFlightController.signal
     });
     if (!res.ok) throw new Error("HTTP " + res.status);
+
+    const MAX_BYTES = 25 * 1024 * 1024; // 25MB sanity cap
+    const len = Number(res.headers.get("content-length") || 0);
+    if (len && len > MAX_BYTES) throw new Error("Response too large");
+
     const rawText = (await res.text()).replace(/^\uFEFF/, "").trim();
     if (!rawText) throw new Error("Empty response from Google Sheet");
+    if (rawText.length > MAX_BYTES) throw new Error("Response too large");
 
     const records = csvParse(rawText);
     if (!records.length) throw new Error("No records found in CSV");
 
     DATA = records.map(normalize);
     ["customerStatus", "registrationType", "ibStatus", "mbStatus", "obStatus"].forEach((id, i) => {
-      fillSelect(id, [
-        "Customer Status",
-        "Registration Type",
-        "IB channel status",
-        "MB channel status",
-        "OB Legacy Data Migration Status"
-      ][i]);
+      fillSelect(id, ["Customer Status", "Registration Type", "IB channel status", "MB channel status", "OB Legacy Data Migration Status"][i]);
     });
     FILTERED = [...DATA];
     currentPage = 1;
     render();
     setStatus(`Google Sheet connected (CSV) • ${DATA.length.toLocaleString()} rows`, "ok");
-    document.getElementById("lastUpdated").textContent =
-      "Last successful sync: " + new Date().toLocaleString();
+    document.getElementById("lastUpdated").textContent = "Last successful sync: " + new Date().toLocaleString();
   } catch (e) {
+    if (e.name === "AbortError") {
+      setStatus("Sync timed out — try again", "error");
+      document.getElementById("lastUpdated").textContent = "Sync error: request timed out";
+      return;
+    }
     console.error("Google Sheet CSV error:", e);
     const msg = String(e.message || e);
     const isCors = msg.includes("Failed to fetch") || msg.includes("NetworkError") || msg.includes("CORS") || msg.includes("Load failed");
     if (isCors) {
       setStatus("CORS blocked — open via local server (see instructions)", "error");
-      document.getElementById("lastUpdated").textContent =
-        "Do not open the HTML as a file. Use a local server (VS Code Live Server, or run: npx serve)";
+      document.getElementById("lastUpdated").textContent = "Do not open the HTML as a file. Use a local server (VS Code Live Server, or run: npx serve)";
     } else {
       setStatus("Google Sheet CSV sync failed — " + msg, "error");
       document.getElementById("lastUpdated").textContent = "Sync error: " + msg;
     }
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 
@@ -1979,24 +1306,24 @@ function downloadCSV() {
     "Identification No", "Branch Code", "Registration Type", "Created Date Time",
     "OB Legacy Data Migration Status"
   ];
-  const lines = [headers, ...FILTERED.map(r => headers.map(h => r[h] || ""))]
+  const lines = [headers, ...FILTERED.map(r => headers.map(h => sanitizeForCsv(r[h] || "")))]
     .map(a => a.map(v => `"${String(v).replace(/"/g, '""')}"`).join(","));
   const blob = new Blob(["\ufeff" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = "customer_registration_filtered.csv";
+  a.rel = "noopener";
+  document.body.appendChild(a);
   a.click();
+  a.remove();
   URL.revokeObjectURL(a.href);
 }
 
-/* Keep Chart.js layouts correct after phone rotation / resize */
 let resizeTimer = null;
 window.addEventListener("resize", () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
-    Object.values(charts).forEach(chart => {
-      if (chart && typeof chart.resize === "function") chart.resize();
-    });
+    Object.values(charts).forEach(chart => { if (chart && typeof chart.resize === "function") chart.resize(); });
   }, 150);
 });
 
@@ -2006,24 +1333,23 @@ window.addEventListener("resize", () => {
    ===================================================== */
 let SERVICE_DATA = [];
 let SERVICE_FILTERED = [];
-let serviceCurrentPage = 1;
-let servicePageSize = 25;
-let SERVICE_FIELDS = { status: "", type: "", date: "" };
+let SERVICE_FIELDS = { date:"", status:"", type:"", name:"" };
+let serviceSearchDebounce = null;
 
-function normalizeHeaderName(v) {
+function normHeader(v) {
   return String(v || "").trim().toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 }
 
-function findServiceField(headers, candidates) {
-  const normalized = headers.map(h => ({ raw: h, n: normalizeHeaderName(h) }));
-  for (const candidate of candidates) {
-    const c = normalizeHeaderName(candidate);
-    const exact = normalized.find(x => x.n === c);
+function findField(headers, candidates) {
+  const hs = headers.map(h => ({raw:h, n:normHeader(h)}));
+  for (const c0 of candidates) {
+    const c = normHeader(c0);
+    const exact = hs.find(x => x.n === c);
     if (exact) return exact.raw;
   }
-  for (const candidate of candidates) {
-    const c = normalizeHeaderName(candidate);
-    const partial = normalized.find(x => x.n.includes(c) || c.includes(x.n));
+  for (const c0 of candidates) {
+    const c = normHeader(c0);
+    const partial = hs.find(x => x.n.includes(c) || c.includes(x.n));
     if (partial) return partial.raw;
   }
   return "";
@@ -2031,58 +1357,50 @@ function findServiceField(headers, candidates) {
 
 function detectServiceFields() {
   const headers = Object.keys(SERVICE_DATA[0] || {});
-  SERVICE_FIELDS.status = findServiceField(headers, [
-    "Request Status", "Service Request Status", "Status", "Progress Status", "Current Status"
+  SERVICE_FIELDS.date = findField(headers, [
+    "Created Date Time","Created Date","Request Date Time","Request Date",
+    "Date Time","Date","Created"
   ]);
-  SERVICE_FIELDS.type = findServiceField(headers, [
-    "Service Type", "Request Type", "Service", "Request Category", "Category", "Type"
+  SERVICE_FIELDS.status = findField(headers, [
+    "Status","Request Status","Service Request Status","Response Status",
+    "Transaction Status","Result","Progress Status"
   ]);
-  SERVICE_FIELDS.date = findServiceField(headers, [
-    "Created Date Time", "Created Date", "Request Date Time", "Request Date", "Created", "Date"
+  SERVICE_FIELDS.type = findField(headers, [
+    "Service Request Type","Request Type","Service Type","Service Category",
+    "Category","Type"
   ]);
-
-  document.getElementById("serviceTypeLabel").textContent =
-    SERVICE_FIELDS.type || "Service Type";
-
-  document.getElementById("serviceTypeChartTitle").textContent =
-    SERVICE_FIELDS.type ? `${SERVICE_FIELDS.type} Distribution` : "Service Request Distribution";
+  SERVICE_FIELDS.name = findField(headers, [
+    "Service Request Name","Request Name","Service Name","Name","Service"
+  ]);
 }
 
 function fillServiceSelect(id, field) {
   const el = document.getElementById(id);
   const current = el.value;
-  const values = [...new Set(SERVICE_DATA
+  const vals = [...new Set(SERVICE_DATA
     .map(r => String(r[field] || "").trim())
     .filter(Boolean))]
     .sort((a,b) => a.localeCompare(b));
-
-  el.innerHTML = '<option value="">All</option>' +
-    values.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join("");
-
-  if (values.includes(current)) el.value = current;
+  el.innerHTML = '<option value="">All</option>' + vals.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join("");
+  if (vals.includes(current)) el.value = current;
 }
 
-function setServiceStatus(message, kind = "warn") {
-  const status = document.getElementById("serviceSourceStatus");
+function setServiceStatus(text, type="warn") {
+  document.getElementById("serviceSourceStatus").textContent = text;
   const dot = document.getElementById("serviceStatusDot");
-  status.textContent = message;
-  dot.className = "dot";
-  if (kind === "ok") dot.classList.add("ok");
-  else if (kind === "error") dot.classList.add("error");
+  dot.className = "dot" + (type === "warn" ? " warn" : type === "error" ? " error" : "");
 }
 
-function serviceStatusGroup(value) {
+function serviceOutcome(value) {
   const s = String(value || "").trim().toLowerCase();
-  if (/complete|closed|resolved|success|done/.test(s)) return "completed";
-  if (/progress|processing|assigned|working|ongoing/.test(s)) return "inprogress";
-  if (/pending|open|initiated|new|waiting/.test(s)) return "pending";
-  if (/failed|reject|cancel|error/.test(s)) return "failed";
+  if (/success|successful|completed|complete|resolved|done|ok|approved/.test(s)) return "successful";
+  if (/fail|failed|error|reject|declined|unsuccessful|cancel/.test(s)) return "failed";
   return "other";
 }
 
-function getServiceDate(row) {
-  if (!SERVICE_FIELDS.date) return null;
-  return parseDashboardDate(String(row[SERVICE_FIELDS.date] || ""));
+function serviceDateOnly(row) {
+  if (!SERVICE_FIELDS.date) return "";
+  return dateOnly(row[SERVICE_FIELDS.date]);
 }
 
 function applyServiceFilters() {
@@ -2090,28 +1408,17 @@ function applyServiceFilters() {
   const to = document.getElementById("serviceDateTo").value;
   const status = document.getElementById("serviceStatus").value;
   const type = document.getElementById("serviceType").value;
-  const search = document.getElementById("serviceSearch").value.trim().toLowerCase();
+  const q = document.getElementById("serviceSearch").value.trim().toLowerCase();
 
   SERVICE_FILTERED = SERVICE_DATA.filter(r => {
+    const d = serviceDateOnly(r);
+    if (from && (!d || d < from)) return false;
+    if (to && (!d || d > to)) return false;
     if (status && String(r[SERVICE_FIELDS.status] || "") !== status) return false;
     if (type && String(r[SERVICE_FIELDS.type] || "") !== type) return false;
-
-    if (from || to) {
-      const d = getServiceDate(r);
-      if (!d) return false;
-      const iso = d.toISOString().slice(0, 10);
-      if (from && iso < from) return false;
-      if (to && iso > to) return false;
-    }
-
-    if (search) {
-      const haystack = Object.values(r).join(" ").toLowerCase();
-      if (!haystack.includes(search)) return false;
-    }
+    if (q && !Object.values(r).join(" ").toLowerCase().includes(q)) return false;
     return true;
   });
-
-  serviceCurrentPage = 1;
   renderServiceDashboard();
 }
 
@@ -2119,213 +1426,202 @@ function clearServiceFilters() {
   ["serviceDateFrom","serviceDateTo","serviceStatus","serviceType","serviceSearch"]
     .forEach(id => document.getElementById(id).value = "");
   SERVICE_FILTERED = [...SERVICE_DATA];
-  serviceCurrentPage = 1;
   renderServiceDashboard();
 }
 
 function destroyServiceChart(id) {
-  if (charts[id]) {
-    charts[id].destroy();
-    delete charts[id];
-  }
+  if (charts[id]) { charts[id].destroy(); delete charts[id]; }
 }
 
-function makeServiceChart(id, type, labels, data, options = {}) {
+function makeServiceDoughnut(id, labels, data) {
   destroyServiceChart(id);
-  const canvas = document.getElementById(id);
-  if (!canvas || typeof Chart === "undefined") return;
-
-  charts[id] = new Chart(canvas, {
-    type,
-    data: {
-      labels,
-      datasets: [{
-        label: options.label || "",
-        data,
-        backgroundColor: CHART_COLORS.map(c => c + "cc"),
-        borderColor: CHART_COLORS,
-        borderWidth: 1,
-        borderRadius: type === "bar" ? 5 : 0
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      indexAxis: options.horizontal ? "y" : "x",
-      plugins: {
-        legend: { display: type === "doughnut", position: "bottom" }
-      },
-      scales: type === "doughnut" ? {} : {
-        y: { beginAtZero: true, ticks: { precision: 0 } },
-        x: { ticks: { autoSkip: true, maxRotation: 45, minRotation: 0 } }
+  const el = document.getElementById(id);
+  if (!el || typeof Chart === "undefined") return;
+  charts[id] = new Chart(el, {
+    type:"doughnut",
+    data:{labels,datasets:[{
+      data,
+      backgroundColor: labels.map((_,i)=>CHART_COLORS[i % CHART_COLORS.length] + "e6"),
+      borderWidth:0
+    }]},
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:"58%",
+      plugins:{
+        legend:{position:"bottom",labels:{boxWidth:10,usePointStyle:true,font:{size:11}}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${Number(ctx.raw||0).toLocaleString()}`}}
       }
     }
   });
 }
 
-function serviceCountBy(field) {
-  const out = {};
-  if (!field) return out;
-  SERVICE_FILTERED.forEach(r => {
-    const v = String(r[field] || "").trim() || "Blank";
-    out[v] = (out[v] || 0) + 1;
+function makeServiceDailyChart(dayKeys, successData, failedData) {
+  destroyServiceChart("serviceDailyChart");
+  const el = document.getElementById("serviceDailyChart");
+  if (!el || typeof Chart === "undefined") return;
+
+  const labels = dayKeys.map(k => new Date(k + "T00:00:00").toLocaleDateString(
+    undefined,{day:"2-digit",month:"short"}
+  ));
+
+  charts.serviceDailyChart = new Chart(el, {
+    type:"line",
+    data:{
+      labels,
+      datasets:[
+        {
+          label:"Successful", data:successData, tension:.3, fill:false,
+          borderColor:"#0f9d6e", backgroundColor:"#0f9d6e",
+          borderWidth:2, pointRadius:2.5, pointHoverRadius:5
+        },
+        {
+          label:"Failed", data:failedData, tension:.3, fill:false,
+          borderColor:"#dc2626", backgroundColor:"#dc2626",
+          borderWidth:2, pointRadius:2.5, pointHoverRadius:5
+        }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{mode:"index",intersect:false},
+      plugins:{legend:{position:"bottom",labels:{boxWidth:10,usePointStyle:true,font:{size:11}}}},
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:10},maxRotation:40,autoSkip:true,maxTicksLimit:14}},
+        y:{beginAtZero:true,ticks:{font:{size:10},precision:0}}
+      }
+    }
   });
-  return out;
+}
+
+function renderServiceBreakdown() {
+  const groups = new Map();
+
+  SERVICE_FILTERED.forEach(r => {
+    const type = String(r[SERVICE_FIELDS.type] || "Blank").trim() || "Blank";
+    const name = String(r[SERVICE_FIELDS.name] || "Blank").trim() || "Blank";
+    const key = type + "\u0000" + name;
+    if (!groups.has(key)) groups.set(key,{type,name,successful:0,failed:0,total:0});
+    const g = groups.get(key);
+    g.total++;
+    const outcome = serviceOutcome(r[SERVICE_FIELDS.status]);
+    if (outcome === "successful") g.successful++;
+    if (outcome === "failed") g.failed++;
+  });
+
+  const rows = [...groups.values()].sort((a,b) =>
+    a.type.localeCompare(b.type) || a.name.localeCompare(b.name)
+  );
+
+  document.querySelector("#serviceBreakdownTable tbody").innerHTML = rows.length
+    ? rows.map((g,i) => `
+      <tr>
+        <td>${esc(g.type)}</td>
+        <td><button class="service-name-btn" onclick="openServiceRecords(${i})">${esc(g.name)}</button></td>
+        <td class="success-count">${g.successful.toLocaleString()}</td>
+        <td class="failed-count">${g.failed.toLocaleString()}</td>
+        <td class="total-count">${g.total.toLocaleString()}</td>
+      </tr>`).join("")
+    : '<tr><td colspan="5" class="empty">No matching service requests</td></tr>';
+
+  window.__serviceBreakdownRows = rows;
 }
 
 function renderServiceDashboard() {
-  const total = SERVICE_FILTERED.length;
-  let completed = 0, pending = 0, inprogress = 0;
+  renderServiceBreakdown();
 
+  const statusCounts = {};
   SERVICE_FILTERED.forEach(r => {
-    const g = serviceStatusGroup(r[SERVICE_FIELDS.status]);
-    if (g === "completed") completed++;
-    else if (g === "pending") pending++;
-    else if (g === "inprogress") inprogress++;
+    const s = String(r[SERVICE_FIELDS.status] || "Blank").trim() || "Blank";
+    statusCounts[s] = (statusCounts[s] || 0) + 1;
   });
-
-  document.getElementById("serviceTotal").textContent = total.toLocaleString();
-  document.getElementById("serviceCompleted").textContent = completed.toLocaleString();
-  document.getElementById("servicePending").textContent = pending.toLocaleString();
-  document.getElementById("serviceInProgress").textContent = inprogress.toLocaleString();
-  document.getElementById("serviceCompletionRate").textContent =
-    (total ? completed / total * 100 : 0).toFixed(1) + "%";
-
-  const statusCounts = serviceCountBy(SERVICE_FIELDS.status);
-  makeServiceChart(
-    "serviceStatusChart",
-    "doughnut",
-    Object.keys(statusCounts),
-    Object.values(statusCounts)
-  );
-
-  const typeCounts = serviceCountBy(SERVICE_FIELDS.type);
-  const topTypes = Object.entries(typeCounts)
-    .sort((a,b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-    .slice(0, 10);
-
-  makeServiceChart(
-    "serviceTypeChart",
-    "bar",
-    topTypes.map(x => x[0]),
-    topTypes.map(x => x[1]),
-    { horizontal: true, label: SERVICE_FIELDS.type || "Requests" }
-  );
+  makeServiceDoughnut("serviceStatusChart", Object.keys(statusCounts), Object.values(statusCounts));
 
   const daily = {};
   SERVICE_FILTERED.forEach(r => {
-    const d = getServiceDate(r);
+    const d = serviceDateOnly(r);
     if (!d) return;
-    const key = d.toISOString().slice(0,10);
-    daily[key] = (daily[key] || 0) + 1;
+    if (!daily[d]) daily[d] = {successful:0,failed:0};
+    const outcome = serviceOutcome(r[SERVICE_FIELDS.status]);
+    if (outcome === "successful") daily[d].successful++;
+    if (outcome === "failed") daily[d].failed++;
   });
+  const keys = Object.keys(daily).sort();
+  makeServiceDailyChart(
+    keys,
+    keys.map(k=>daily[k].successful),
+    keys.map(k=>daily[k].failed)
+  );
+}
 
-  const dailyRows = Object.entries(daily).sort((a,b) => a[0].localeCompare(b[0]));
-  makeServiceChart(
-    "serviceDailyChart",
-    "line",
-    dailyRows.map(x => x[0]),
-    dailyRows.map(x => x[1]),
-    { label: "Service Requests" }
+function openServiceRecords(index) {
+  const g = (window.__serviceBreakdownRows || [])[index];
+  if (!g) return;
+
+  const rows = SERVICE_FILTERED.filter(r =>
+    (String(r[SERVICE_FIELDS.type] || "Blank").trim() || "Blank") === g.type &&
+    (String(r[SERVICE_FIELDS.name] || "Blank").trim() || "Blank") === g.name
   );
 
-  renderServiceTable();
-  renderServiceSourcePreview();
-}
-
-function serviceTotalPages() {
-  return Math.max(1, Math.ceil(SERVICE_FILTERED.length / servicePageSize));
-}
-
-function goToServicePage(page) {
-  serviceCurrentPage = Math.max(1, Math.min(Number(page) || 1, serviceTotalPages()));
-  renderServiceTable();
-}
-
-function changeServicePageSize(size) {
-  servicePageSize = Math.max(1, Number(size) || 25);
-  serviceCurrentPage = 1;
-  renderServiceTable();
-}
-
-function renderServiceTable() {
-  const table = document.getElementById("serviceRecordsTable");
   const headers = Object.keys(SERVICE_DATA[0] || {});
-  table.querySelector("thead").innerHTML =
-    "<tr>" + headers.map(h => `<th>${esc(h)}</th>`).join("") + "</tr>";
+  document.getElementById("serviceModalTitle").textContent =
+    `${g.type} — ${g.name}`;
+  document.getElementById("serviceModalMeta").textContent =
+    `${rows.length.toLocaleString()} relevant Service Request Record(s) • Successful: ${g.successful.toLocaleString()} • Failed: ${g.failed.toLocaleString()}`;
 
-  const pages = serviceTotalPages();
-  if (serviceCurrentPage > pages) serviceCurrentPage = pages;
-  const start = (serviceCurrentPage - 1) * servicePageSize;
-  const rows = SERVICE_FILTERED.slice(start, start + servicePageSize);
+  document.querySelector("#serviceModalTable thead").innerHTML =
+    "<tr>" + headers.map(h=>`<th>${esc(h)}</th>`).join("") + "</tr>";
+  document.querySelector("#serviceModalTable tbody").innerHTML =
+    rows.length
+      ? rows.map(r=>"<tr>"+headers.map(h=>`<td>${esc(r[h])}</td>`).join("")+"</tr>").join("")
+      : `<tr><td colspan="${Math.max(1,headers.length)}" class="empty">No records found</td></tr>`;
 
-  table.querySelector("tbody").innerHTML = rows.length
-    ? rows.map(r => "<tr>" + headers.map(h => `<td>${esc(r[h])}</td>`).join("") + "</tr>").join("")
-    : `<tr><td colspan="${Math.max(headers.length,1)}" class="empty">No matching service requests</td></tr>`;
-
-  const shownFrom = SERVICE_FILTERED.length ? start + 1 : 0;
-  const shownTo = Math.min(start + servicePageSize, SERVICE_FILTERED.length);
-  document.getElementById("serviceRecordCount").textContent =
-    `Showing ${shownFrom.toLocaleString()}–${shownTo.toLocaleString()} of ${SERVICE_FILTERED.length.toLocaleString()} request(s)`;
-
-  document.getElementById("servicePageInfo").textContent =
-    `Page ${serviceCurrentPage.toLocaleString()} of ${pages.toLocaleString()}`;
+  document.getElementById("serviceRecordsModal").classList.add("show");
+  document.body.style.overflow = "hidden";
 }
 
-function renderServiceSourcePreview() {
-  const headers = Object.keys(SERVICE_DATA[0] || {});
-  document.querySelector("#serviceSourceTable thead").innerHTML =
-    "<tr>" + headers.map(h => `<th>${esc(h)}</th>`).join("") + "</tr>";
-  document.querySelector("#serviceSourceTable tbody").innerHTML =
-    SERVICE_FILTERED.slice(0,100).map(r =>
-      "<tr>" + headers.map(h => `<td>${esc(r[h])}</td>`).join("") + "</tr>"
-    ).join("");
+function closeServiceRecordsModal(event) {
+  if (event && event.target !== document.getElementById("serviceRecordsModal")) return;
+  document.getElementById("serviceRecordsModal").classList.remove("show");
+  document.body.style.overflow = "";
 }
 
-function showServiceTab(id, btn) {
-  document.getElementById("serviceRecords").style.display =
-    id === "serviceRecords" ? "block" : "none";
-  document.getElementById("serviceFields").style.display =
-    id === "serviceFields" ? "block" : "none";
-  document.querySelectorAll("#serviceModule .tab").forEach(x => x.classList.remove("active-tab"));
-  btn.classList.add("active-tab");
-}
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeServiceRecordsModal();
+});
 
 async function refreshServiceData() {
   try {
-    setServiceStatus("Loading Service Requests from Google Sheet (CSV)…", "warn");
+    setServiceStatus("Loading Service Requests from Google Sheet (CSV)…","warn");
+
     const url = SERVICE_REQUEST_CSV_URL +
       (SERVICE_REQUEST_CSV_URL.includes("?") ? "&" : "?") + "_ts=" + Date.now();
 
-    const res = await fetch(url, {
-      method: "GET",
-      cache: "no-store",
-      redirect: "follow"
-    });
-
+    const res = await fetch(url,{method:"GET",cache:"no-store",redirect:"follow"});
     if (!res.ok) throw new Error("HTTP " + res.status);
 
-    const rawText = (await res.text()).replace(/^\uFEFF/, "").trim();
+    const rawText = (await res.text()).replace(/^\uFEFF/,"").trim();
     if (!rawText) throw new Error("Empty response from Google Sheet");
 
     const records = csvParse(rawText);
-    if (!records.length) throw new Error("No service request records found in CSV");
+    if (!records.length) throw new Error("No Service Request records found");
 
     SERVICE_DATA = records;
-    SERVICE_FILTERED = [...SERVICE_DATA];
-    serviceCurrentPage = 1;
-
+    SERVICE_FILTERED = [...records];
     detectServiceFields();
-    if (SERVICE_FIELDS.status) fillServiceSelect("serviceStatus", SERVICE_FIELDS.status);
-    if (SERVICE_FIELDS.type) fillServiceSelect("serviceType", SERVICE_FIELDS.type);
+
+    if (!SERVICE_FIELDS.status || !SERVICE_FIELDS.type || !SERVICE_FIELDS.name) {
+      console.warn("Service field detection:", SERVICE_FIELDS, Object.keys(records[0] || {}));
+    }
+
+    if (SERVICE_FIELDS.status) fillServiceSelect("serviceStatus",SERVICE_FIELDS.status);
+    if (SERVICE_FIELDS.type) fillServiceSelect("serviceType",SERVICE_FIELDS.type);
 
     renderServiceDashboard();
-    setServiceStatus(`Service Requests connected (CSV) • ${SERVICE_DATA.length.toLocaleString()} rows`, "ok");
+    setServiceStatus(`Service Requests connected (CSV) • ${SERVICE_DATA.length.toLocaleString()} rows`,"ok");
     document.getElementById("serviceLastUpdated").textContent =
       "Last successful sync: " + new Date().toLocaleString();
   } catch (e) {
-    console.error("Service Requests CSV error:", e);
-    setServiceStatus("Service Requests CSV sync failed — " + String(e.message || e), "error");
+    console.error("Service Requests CSV error:",e);
+    setServiceStatus("Service Requests CSV sync failed — " + String(e.message || e),"error");
     document.getElementById("serviceLastUpdated").textContent =
       "Sync error: " + String(e.message || e);
   }
@@ -2335,19 +1631,25 @@ function switchMainModule(module) {
   const registration = module === "registration";
   document.getElementById("registrationModule").style.display = registration ? "block" : "none";
   document.getElementById("serviceModule").style.display = registration ? "none" : "block";
+  document.getElementById("registrationModuleBtn").classList.toggle("active-main-module",registration);
+  document.getElementById("serviceModuleBtn").classList.toggle("active-main-module",!registration);
 
-  document.getElementById("registrationModuleBtn").classList.toggle("active-main-module", registration);
-  document.getElementById("serviceModuleBtn").classList.toggle("active-main-module", !registration);
-
-  if (registration) {
-    document.querySelector("h1").textContent = "Pan Asia EZY Registration Dashboard";
-  } else {
-    document.querySelector("h1").textContent = "Pan Asia EZY Service Requests Dashboard";
-    if (!SERVICE_DATA.length) refreshServiceData();
-  }
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (!registration && !SERVICE_DATA.length) refreshServiceData();
+  window.scrollTo({top:0,behavior:"smooth"});
 }
+
+document.getElementById("serviceSearch").addEventListener("input", () => {
+  clearTimeout(serviceSearchDebounce);
+  serviceSearchDebounce = setTimeout(applyServiceFilters,280);
+});
+
+["serviceDateFrom","serviceDateTo","serviceStatus","serviceType"].forEach(id => {
+  document.getElementById(id).addEventListener("change",() => {
+    clearTimeout(serviceSearchDebounce);
+    serviceSearchDebounce = setTimeout(applyServiceFilters,120);
+  });
+});
+
 
 /* Init */
 updatePagination();
