@@ -355,6 +355,102 @@ tbody tr:hover { background: #f8fafc; }
 @media(max-width:900px){.modal-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}.modal-toolbar .modal-download-wrap{grid-column:span 2}}
 @media(max-width:520px){.modal-toolbar{grid-template-columns:1fr;gap:8px}.modal-toolbar .modal-download-wrap{grid-column:auto}.modal-download-btn{width:100%}.modal-summary span{width:100%}}
 
+
+/* Clickable Registration KPI cards */
+.card.clickable-kpi {
+  appearance:none;
+  width:100%;
+  text-align:left;
+  font-family:inherit;
+  cursor:pointer;
+}
+.card.clickable-kpi:hover {
+  transform:translateY(-2px);
+  box-shadow:0 10px 24px rgba(15,23,42,.12);
+}
+.card.clickable-kpi:focus-visible {
+  outline:3px solid rgba(37,99,235,.28);
+  outline-offset:2px;
+}
+
+/* Customer status records popup */
+.customer-modal-overlay {
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  padding:20px;
+  background:rgba(15,23,42,.52);
+  align-items:center;
+  justify-content:center;
+}
+.customer-modal-overlay.show { display:flex; }
+
+.customer-modal-card {
+  width:min(1250px,100%);
+  max-height:88vh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background:#fff;
+  border-radius:16px;
+  box-shadow:0 24px 70px rgba(15,23,42,.30);
+}
+.customer-modal-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:16px 18px;
+  border-bottom:1px solid var(--line);
+}
+.customer-modal-title-wrap h2 {
+  margin:0;
+  font-size:1.05rem;
+  color:#1e293b;
+}
+.customer-modal-meta {
+  margin-top:4px;
+  color:var(--muted);
+  font-size:.75rem;
+}
+.customer-modal-close {
+  min-width:38px;
+  width:38px;
+  height:38px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.2rem;
+  background:#f1f5f9;
+  color:#334155;
+}
+.customer-modal-body {
+  padding:14px 18px 18px;
+  overflow:auto;
+}
+.customer-modal-pagination {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.customer-modal-pagination .pagination {
+  margin:0;
+}
+
+@media(max-width:600px) {
+  .customer-modal-overlay { padding:8px; }
+  .customer-modal-card { max-height:92vh; border-radius:12px; }
+  .customer-modal-header { padding:12px; }
+  .customer-modal-title-wrap h2 { font-size:.92rem; }
+  .customer-modal-body { padding:10px 12px 12px; }
+  .customer-modal-pagination { align-items:flex-start; }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
         crossorigin="anonymous"
@@ -406,26 +502,26 @@ tbody tr:hover { background: #f8fafc; }
 
   <!-- KPI Cards -->
   <div class="cards kpi-cards">
-    <div class="card">
+    <button type="button" class="card clickable-kpi" onclick="openCustomerStatusRecords('all')" aria-label="View Total User Base records">
       <div class="label">Total User Base</div>
       <div class="value" id="total">0</div>
-      <div class="small">Total current filtered users</div>
-    </div>
-    <div class="card">
+      <div class="small">Click to view current filtered users</div>
+    </button>
+    <button type="button" class="card clickable-kpi" onclick="openCustomerStatusRecords('active')" aria-label="View Active User Base records">
       <div class="label">Active User Base</div>
       <div class="value" id="active">0</div>
-      <div class="small">Customer Status = Active</div>
-    </div>
-    <div class="card">
+      <div class="small">Customer Status = Active • Click to view</div>
+    </button>
+    <button type="button" class="card clickable-kpi" onclick="openCustomerStatusRecords('locked')" aria-label="View Locked User Base records">
       <div class="label">Locked User Base</div>
       <div class="value" id="locked">0</div>
-      <div class="small">Customer Status = Locked</div>
-    </div>
-    <div class="card">
+      <div class="small">Customer Status = Locked • Click to view</div>
+    </button>
+    <button type="button" class="card clickable-kpi" onclick="openCustomerStatusRecords('initiated')" aria-label="View Initiated User Base records">
       <div class="label">Initiated User Base</div>
       <div class="value" id="initiated">0</div>
-      <div class="small">Registered but not activated</div>
-    </div>
+      <div class="small">Registered but not activated • Click to view</div>
+    </button>
     <div class="card">
       <div class="label">Activation Rate</div>
       <div class="value" id="rate">0%</div>
@@ -507,7 +603,7 @@ tbody tr:hover { background: #f8fafc; }
     </div>
   </div>
 
-  <div class="panel">
+  <div class="panel" style="display:none" aria-hidden="true">
     <div class="tabbar">
       <button class="tab active-tab" onclick="showTab('records', this)">Customer Records</button>
       <button class="tab" onclick="showTab('allfields', this)">Data Source Fields</button>
@@ -614,6 +710,58 @@ tbody tr:hover { background: #f8fafc; }
 
   <div class="footer">Pan Asia EZY Dashboard • User Registrations & Service Requests</div>
 
+  <!-- Customer Status Records Modal -->
+  <div id="customerRecordsModal" class="customer-modal-overlay" onclick="closeCustomerRecordsModal(event)">
+    <div class="customer-modal-card" onclick="event.stopPropagation()">
+      <div class="customer-modal-header">
+        <div class="customer-modal-title-wrap">
+          <h2 id="customerModalTitle">Customer Records</h2>
+          <div id="customerModalMeta" class="customer-modal-meta"></div>
+        </div>
+        <button class="customer-modal-close" onclick="closeCustomerRecordsModal()" aria-label="Close">×</button>
+      </div>
+
+      <div class="customer-modal-body">
+        <div class="table-wrap">
+          <table id="customerModalTable">
+            <thead>
+              <tr>
+                <th>CIF Number</th>
+                <th>Customer Name</th>
+                <th>Customer Status</th>
+                <th>Identification Type</th>
+                <th>Identification No</th>
+                <th>Branch Code</th>
+                <th>Registration Type</th>
+                <th>Created Date Time</th>
+                <th>OB Legacy Data Migration Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="customer-modal-pagination">
+          <div id="customerModalCount" class="small"></div>
+          <div class="pagination">
+            <label for="customerModalPageSize" class="page-size-label">Rows per page</label>
+            <select id="customerModalPageSize" onchange="changeCustomerModalPageSize(this.value)">
+              <option value="25" selected>25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="250">250</option>
+            </select>
+            <button class="secondary page-btn" onclick="goToCustomerModalPage(1)">«</button>
+            <button class="secondary page-btn" onclick="goToCustomerModalPage(customerModalPage - 1)">‹</button>
+            <span id="customerModalPageInfo" class="page-info">Page 1 of 1</span>
+            <button class="secondary page-btn" onclick="goToCustomerModalPage(customerModalPage + 1)">›</button>
+            <button class="secondary page-btn" onclick="goToCustomerModalPage(customerModalTotalPages())">»</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Service Request Records Modal -->
   <div id="serviceRecordsModal" class="modal-overlay" onclick="closeServiceRecordsModal(event)">
     <div class="modal-card" onclick="event.stopPropagation()">
@@ -626,10 +774,10 @@ tbody tr:hover { background: #f8fafc; }
       </div>
       <div class="modal-body">
         <div class="modal-toolbar">
-          <div class="field"><label> Created Date From</label><input type="date" id="modalDateFrom" onchange="applyModalFilters()"></div>
-          <div class="field"><label> Created Date To</label><input type="date" id="modalDateTo" onchange="applyModalFilters()"></div>
-          <div class="field"><label>Status</label><select id="modalStatus" onchange="applyModalFilters()"><option value="">All</option></select></div>
-          <div class="field"><label>Search</label><input id="modalSearch" type="search" placeholder="Search records..." oninput="applyModalFilters()"></div>
+          <div class="field"><label>📅 Created Date From</label><input type="date" id="modalDateFrom" onchange="applyModalFilters()"></div>
+          <div class="field"><label>📅 Created Date To</label><input type="date" id="modalDateTo" onchange="applyModalFilters()"></div>
+          <div class="field"><label>🔽 Status</label><select id="modalStatus" onchange="applyModalFilters()"><option value="">All</option></select></div>
+          <div class="field"><label>🔎 Search</label><input id="modalSearch" type="search" placeholder="Search records..." oninput="applyModalFilters()"></div>
           <div class="modal-download-wrap"><button class="modal-download-btn" onclick="downloadModalRecords()">⬇ Download CSV</button></div>
         </div>
         <div id="serviceModalSummary" class="modal-summary"></div>
@@ -1336,6 +1484,112 @@ window.addEventListener("resize", () => {
   resizeTimer = setTimeout(() => {
     Object.values(charts).forEach(chart => { if (chart && typeof chart.resize === "function") chart.resize(); });
   }, 150);
+});
+
+
+
+/* =====================================================
+   CUSTOMER STATUS RECORDS POPUP
+   ===================================================== */
+let CUSTOMER_MODAL_ROWS = [];
+let customerModalPage = 1;
+let customerModalPageSize = 25;
+
+const CUSTOMER_STATUS_TITLES = {
+  all: "Total User Base — Customer Records",
+  active: "Active User Base — Customer Records",
+  locked: "Locked User Base — Customer Records",
+  initiated: "Initiated User Base — Customer Records"
+};
+
+function openCustomerStatusRecords(status) {
+  const normalized = String(status || "all").toLowerCase();
+
+  CUSTOMER_MODAL_ROWS = normalized === "all"
+    ? [...FILTERED]
+    : FILTERED.filter(r =>
+        String(r["Customer Status"] || "").trim().toLowerCase() === normalized
+      );
+
+  customerModalPage = 1;
+  document.getElementById("customerModalTitle").textContent =
+    CUSTOMER_STATUS_TITLES[normalized] || "Customer Records";
+
+  const statusText = normalized === "all"
+    ? "Current filtered user base"
+    : "Customer Status = " + normalized.charAt(0).toUpperCase() + normalized.slice(1);
+
+  document.getElementById("customerModalMeta").textContent =
+    `${statusText} • ${CUSTOMER_MODAL_ROWS.length.toLocaleString()} record(s)`;
+
+  renderCustomerModalRecords();
+
+  document.getElementById("customerRecordsModal").classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+
+function customerModalTotalPages() {
+  return Math.max(1, Math.ceil(CUSTOMER_MODAL_ROWS.length / customerModalPageSize));
+}
+
+function goToCustomerModalPage(page) {
+  customerModalPage = Math.max(
+    1,
+    Math.min(Number(page) || 1, customerModalTotalPages())
+  );
+  renderCustomerModalRecords();
+}
+
+function changeCustomerModalPageSize(size) {
+  customerModalPageSize = Math.max(1, Number(size) || 25);
+  customerModalPage = 1;
+  renderCustomerModalRecords();
+}
+
+function renderCustomerModalRecords() {
+  const totalPages = customerModalTotalPages();
+  if (customerModalPage > totalPages) customerModalPage = totalPages;
+
+  const start = (customerModalPage - 1) * customerModalPageSize;
+  const rows = CUSTOMER_MODAL_ROWS.slice(start, start + customerModalPageSize);
+  const tbody = document.querySelector("#customerModalTable tbody");
+
+  tbody.innerHTML = rows.length
+    ? rows.map(r => `
+      <tr>
+        <td>${esc(r["CIF Number"])}</td>
+        <td>${esc(r["Customer Name"])}</td>
+        <td>${badge(r["Customer Status"])}</td>
+        <td>${esc(r["Identification Type"])}</td>
+        <td>${esc(r["Identification No"])}</td>
+        <td>${esc(r["Branch Code"])}</td>
+        <td>${esc(r["Registration Type"])}</td>
+        <td>${esc(r["Created Date Time"])}</td>
+        <td>${badge(r["OB Legacy Data Migration Status"])}</td>
+      </tr>
+    `).join("")
+    : '<tr><td colspan="9" class="empty">No matching customer records</td></tr>';
+
+  const from = CUSTOMER_MODAL_ROWS.length ? start + 1 : 0;
+  const to = Math.min(start + customerModalPageSize, CUSTOMER_MODAL_ROWS.length);
+
+  document.getElementById("customerModalCount").textContent =
+    `Showing ${from.toLocaleString()}–${to.toLocaleString()} of ${CUSTOMER_MODAL_ROWS.length.toLocaleString()} record(s)`;
+
+  document.getElementById("customerModalPageInfo").textContent =
+    `Page ${customerModalPage.toLocaleString()} of ${totalPages.toLocaleString()}`;
+}
+
+function closeCustomerRecordsModal(event) {
+  if (event && event.target !== document.getElementById("customerRecordsModal")) return;
+  document.getElementById("customerRecordsModal").classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeCustomerRecordsModal();
+  }
 });
 
 
