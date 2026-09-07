@@ -347,6 +347,14 @@ tbody tr:hover { background: #f8fafc; }
   .modal-body { padding:10px 12px 12px; }
 }
 
+
+/* Service Records popup filters and download */
+.modal-toolbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;gap:10px;padding:12px;margin-bottom:12px;background:#f8fafc;border:1px solid var(--line);border-radius:12px}
+.modal-toolbar .field{min-width:0}.modal-toolbar label{display:block;font-size:.68rem;font-weight:700;color:var(--muted);margin-bottom:5px}.modal-toolbar input,.modal-toolbar select{width:100%;min-width:0}.modal-toolbar .modal-download-wrap{display:flex;align-items:end}.modal-download-btn{white-space:nowrap;min-height:40px}
+.modal-summary{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.modal-summary span{padding:6px 10px;border-radius:999px;background:#f1f5f9;font-size:.72rem;font-weight:700;color:#334155}
+@media(max-width:900px){.modal-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}.modal-toolbar .modal-download-wrap{grid-column:span 2}}
+@media(max-width:520px){.modal-toolbar{grid-template-columns:1fr;gap:8px}.modal-toolbar .modal-download-wrap{grid-column:auto}.modal-download-btn{width:100%}.modal-summary span{width:100%}}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
         crossorigin="anonymous"
@@ -617,12 +625,15 @@ tbody tr:hover { background: #f8fafc; }
         <button class="modal-close" onclick="closeServiceRecordsModal()" aria-label="Close">×</button>
       </div>
       <div class="modal-body">
-        <div class="table-wrap">
-          <table id="serviceModalTable">
-            <thead></thead>
-            <tbody></tbody>
-          </table>
+        <div class="modal-toolbar">
+          <div class="field"><label>📅 Created Date From</label><input type="date" id="modalDateFrom" onchange="applyModalFilters()"></div>
+          <div class="field"><label>📅 Created Date To</label><input type="date" id="modalDateTo" onchange="applyModalFilters()"></div>
+          <div class="field"><label>🔽 Status</label><select id="modalStatus" onchange="applyModalFilters()"><option value="">All</option></select></div>
+          <div class="field"><label>🔎 Search</label><input id="modalSearch" type="search" placeholder="Search records..." oninput="applyModalFilters()"></div>
+          <div class="modal-download-wrap"><button class="modal-download-btn" onclick="downloadModalRecords()">⬇ Download CSV</button></div>
         </div>
+        <div id="serviceModalSummary" class="modal-summary"></div>
+        <div class="table-wrap"><table id="serviceModalTable"><thead></thead><tbody></tbody></table></div>
       </div>
     </div>
   </div>
@@ -1552,36 +1563,98 @@ function renderServiceDashboard() {
   );
 }
 
+
+let MODAL_SERVICE_RECORDS = [];
+let MODAL_SERVICE_FILTERED = [];
+let MODAL_SERVICE_GROUP = null;
+
 function openServiceRecords(index) {
   const g = (window.__serviceBreakdownRows || [])[index];
   if (!g) return;
-
-  const rows = SERVICE_FILTERED.filter(r =>
+  MODAL_SERVICE_GROUP = g;
+  MODAL_SERVICE_RECORDS = SERVICE_FILTERED.filter(r =>
     (String(r[SERVICE_FIELDS.type] || "Blank").trim() || "Blank") === g.type &&
     (String(r[SERVICE_FIELDS.name] || "Blank").trim() || "Blank") === g.name
   );
-
-  const headers = Object.keys(SERVICE_DATA[0] || {});
-  document.getElementById("serviceModalTitle").textContent =
-    `${g.type} — ${g.name}`;
-  document.getElementById("serviceModalMeta").textContent =
-    `${rows.length.toLocaleString()} relevant Service Request Record(s) • Successful: ${g.successful.toLocaleString()} • Failed: ${g.failed.toLocaleString()}`;
-
-  document.querySelector("#serviceModalTable thead").innerHTML =
-    "<tr>" + headers.map(h=>`<th>${esc(h)}</th>`).join("") + "</tr>";
-  document.querySelector("#serviceModalTable tbody").innerHTML =
-    rows.length
-      ? rows.map(r=>"<tr>"+headers.map(h=>`<td>${esc(r[h])}</td>`).join("")+"</tr>").join("")
-      : `<tr><td colspan="${Math.max(1,headers.length)}" class="empty">No records found</td></tr>`;
-
+  MODAL_SERVICE_FILTERED = [...MODAL_SERVICE_RECORDS];
+  document.getElementById("serviceModalTitle").textContent = `${g.type} — ${g.name}`;
+  document.getElementById("modalDateFrom").value = "";
+  document.getElementById("modalDateTo").value = "";
+  document.getElementById("modalSearch").value = "";
+  const statuses = [...new Set(MODAL_SERVICE_RECORDS.map(r => String(r[SERVICE_FIELDS.status] || "").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  document.getElementById("modalStatus").innerHTML = '<option value="">All</option>' + statuses.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join("");
+  renderModalRecords();
   document.getElementById("serviceRecordsModal").classList.add("show");
   document.body.style.overflow = "hidden";
+}
+
+function applyModalFilters() {
+  const from = document.getElementById("modalDateFrom").value;
+  const to = document.getElementById("modalDateTo").value;
+  const status = document.getElementById("modalStatus").value;
+  const search = document.getElementById("modalSearch").value.trim().toLowerCase();
+  MODAL_SERVICE_FILTERED = MODAL_SERVICE_RECORDS.filter(r => {
+    const d = serviceDateOnly(r);
+    if (from && (!d || d < from)) return false;
+    if (to && (!d || d > to)) return false;
+    if (status && String(r[SERVICE_FIELDS.status] || "") !== status) return false;
+    if (search && !Object.values(r).join(" ").toLowerCase().includes(search)) return false;
+    return true;
+  });
+  renderModalRecords();
+}
+
+function renderModalRecords() {
+  const rows = MODAL_SERVICE_FILTERED;
+  const headers = Object.keys(SERVICE_DATA[0] || {});
+  let successful = 0, failed = 0;
+  rows.forEach(r => {
+    const o = serviceOutcome(r[SERVICE_FIELDS.status]);
+    if (o === "successful") successful++;
+    if (o === "failed") failed++;
+  });
+  document.getElementById("serviceModalMeta").textContent =
+    MODAL_SERVICE_GROUP ? `Service Request Type: ${MODAL_SERVICE_GROUP.type}` : "";
+  document.getElementById("serviceModalSummary").innerHTML =
+    `<span>📋 Total Records: ${rows.length.toLocaleString()}</span>` +
+    `<span class="success-count">✓ Successful: ${successful.toLocaleString()}</span>` +
+    `<span class="failed-count">✕ Failed: ${failed.toLocaleString()}</span>`;
+  document.querySelector("#serviceModalTable thead").innerHTML =
+    "<tr>" + headers.map(h => `<th>${esc(h)}</th>`).join("") + "</tr>";
+  document.querySelector("#serviceModalTable tbody").innerHTML = rows.length
+    ? rows.map(r => "<tr>" + headers.map(h => `<td>${esc(r[h])}</td>`).join("") + "</tr>").join("")
+    : `<tr><td colspan="${Math.max(1,headers.length)}" class="empty">No matching records found</td></tr>`;
+}
+
+function csvEscape(value) {
+  const v = String(value ?? "");
+  return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+}
+
+function downloadModalRecords() {
+  if (!MODAL_SERVICE_FILTERED.length) { alert("No records available to download."); return; }
+  const headers = Object.keys(SERVICE_DATA[0] || {});
+  const lines = [
+    headers.map(csvEscape).join(","),
+    ...MODAL_SERVICE_FILTERED.map(r => headers.map(h => csvEscape(r[h])).join(","))
+  ];
+  const blob = new Blob(["\uFEFF" + lines.join("\r\n")], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const safe = String((MODAL_SERVICE_GROUP?.type || "Service_Request") + "_" + (MODAL_SERVICE_GROUP?.name || "Records")).replace(/[^a-z0-9]+/gi,"_");
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${safe}_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
 }
 
 function closeServiceRecordsModal(event) {
   if (event && event.target !== document.getElementById("serviceRecordsModal")) return;
   document.getElementById("serviceRecordsModal").classList.remove("show");
   document.body.style.overflow = "";
+  MODAL_SERVICE_RECORDS = [];
+  MODAL_SERVICE_FILTERED = [];
+  MODAL_SERVICE_GROUP = null;
 }
 
 document.addEventListener("keydown", e => {
