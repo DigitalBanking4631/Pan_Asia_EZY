@@ -370,108 +370,295 @@ tbody tr:hover { background: #f8fafc; }
 @media(max-width:600px){.customer-records-modal{padding:8px}.customer-records-modal-card{max-height:92vh;border-radius:12px}.customer-records-modal-header{padding:12px}.customer-records-modal-body{padding:10px 12px 12px}}
 
 
-/* ===== Screenshot-inspired compact banking dashboard layout ===== */
+/* =========================================================
+   CLEAN OPERATIONS DASHBOARD UI — presentation layer only
+   Existing data processing, filtering, charts and exports retained.
+   ========================================================= */
 :root {
-  --bg:#f5f8fc; --line:#e4ebf4; --primary:#2563eb; --primary-2:#0ea5e9;
-  --success:#10b981; --warning:#f59e0b; --danger:#ef4444; --radius:10px;
-  --shadow:0 2px 8px rgba(15,23,42,.025);
+  --bg:#f5f8fc;
+  --card:#fff;
+  --text:#172338;
+  --muted:#718096;
+  --line:#e3eaf3;
+  --primary:#2563eb;
+  --primary-hover:#1d4ed8;
+  --primary-soft:#eff6ff;
+  --success:#10a879;
+  --warning:#f59e0b;
+  --danger:#e5484d;
+  --radius:10px;
+  --radius-sm:7px;
+  --shadow:0 1px 3px rgba(15,23,42,.035);
+  --shadow-lg:0 8px 22px rgba(15,23,42,.07);
 }
-body { background:#f5f8fc; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--text); }
 .app-shell { min-height:100vh; }
 .sidebar {
-  position:fixed; inset:0 auto 0 0; width:214px; background:#fff;
-  border-right:1px solid #e5ebf3; display:flex; flex-direction:column; z-index:50;
+  position:fixed; inset:0 auto 0 0; width:214px; z-index:100;
+  display:flex; flex-direction:column; background:#fff;
+  border-right:1px solid var(--line);
 }
-.sidebar-brand { height:64px; display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid #e8edf5; }
-.brand-mark { width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,#2563eb,#0ea5e9);color:#fff;display:grid;place-items:center;font-weight:800;box-shadow:0 2px 5px #2563eb33; }
+.sidebar-brand {
+  min-height:64px; display:flex; align-items:center; gap:10px;
+  padding:12px 16px; border-bottom:1px solid var(--line);
+}
+.brand-mark {
+  width:29px;height:29px;border-radius:8px;display:grid;place-items:center;
+  flex:0 0 auto;color:#fff;font-weight:800;
+  background:linear-gradient(135deg,#2563eb,#0ea5e9);
+  box-shadow:0 2px 6px rgba(37,99,235,.2);
+}
 .brand-copy { min-width:0;display:flex;flex-direction:column;line-height:1.25; }
-.brand-copy strong { font-size:11px;color:#25334a;white-space:nowrap; }
-.brand-copy small { font-size:8px;color:#94a3b8;font-weight:700;letter-spacing:.06em; }
-.version-tag { display:inline-block;font-size:8px;color:#2563eb;background:#eff6ff;border:1px solid #dbeafe;padding:1px 4px;border-radius:3px; }
-.sidebar-section-label { padding:16px 17px 8px;color:#9aa9bd;font-size:9px;font-weight:800;letter-spacing:.07em; }
+.brand-copy strong { font-size:11px;color:#26354b;white-space:nowrap; }
+.brand-copy small { margin-top:2px;font-size:8px;color:#94a3b8;font-weight:800;letter-spacing:.07em; }
+.version-tag { display:inline-block;padding:1px 4px;border:1px solid #dbeafe;border-radius:4px;background:#eff6ff;color:#2563eb;font-size:8px; }
+.sidebar-section-label { padding:17px 17px 8px;font-size:9px;font-weight:800;letter-spacing:.08em;color:#9aa8bb; }
 .sidebar-nav { padding:0 9px; }
-.sidebar-nav .main-module-tabs { display:flex;flex-direction:column;gap:4px;margin:0;padding:0;background:transparent;border:0;box-shadow:none; }
-.sidebar-nav .main-module-tab { flex:none;width:100%;display:flex;align-items:center;justify-content:flex-start;gap:9px;min-height:36px;padding:8px 10px;border-radius:7px;background:transparent;color:#64748b;font-size:11px;text-align:left; }
-.sidebar-nav .main-module-tab .nav-icon { width:15px;font-size:13px;text-align:center;color:#94a3b8; }
-.sidebar-nav .main-module-tab .nav-count { margin-left:auto;border-radius:12px;background:#eef2f7;color:#64748b;padding:2px 6px;font-size:9px;font-weight:700; }
-.sidebar-nav .main-module-tab.active-main-module { background:#eff6ff;color:#2563eb;border-color:#dbeafe;box-shadow:none;font-weight:700; }
-.sidebar-nav .main-module-tab.active-main-module .nav-icon { color:#2563eb; }
-.sidebar-bottom { margin-top:auto;border-top:1px solid #e8edf5;padding:12px 10px;display:flex;align-items:center;gap:8px; }
-.profile-mark { width:25px;height:25px;display:grid;place-items:center;border-radius:50%;background:#2563eb;color:#fff;font-size:9px;font-weight:800; }
-.profile-copy { display:flex;flex-direction:column;min-width:0;line-height:1.3; }
-.profile-copy strong {font-size:10px;color:#334155}.profile-copy small{font-size:8px;color:#94a3b8}
-.profile-sync {margin-left:auto;color:#94a3b8;font-size:13px}\n.sidebar-quick-actions{margin-left:auto;display:flex;gap:4px}.sidebar-quick-actions button{padding:4px 7px;min-height:25px;font-size:11px;border-radius:5px}
+.sidebar-nav .main-module-tabs {
+  display:flex;flex-direction:column;gap:4px;margin:0;padding:0;
+  background:transparent;border:0;border-radius:0;box-shadow:none;
+}
+.sidebar-nav .main-module-tab {
+  display:flex;align-items:center;justify-content:flex-start;gap:9px;
+  width:100%;min-height:37px;padding:9px 10px;border:1px solid transparent;
+  border-radius:7px;background:transparent;color:#5e6d82;
+  font-size:11px;text-align:left;box-shadow:none;
+}
+.sidebar-nav .main-module-tab:hover { background:#f7faff;color:#25354b; }
+.sidebar-nav .main-module-tab .nav-icon { width:15px;text-align:center;font-size:14px;color:#91a0b5; }
+.sidebar-nav .main-module-tab.active-main-module {
+  background:var(--primary-soft);border-color:#dce9ff;color:var(--primary);
+  box-shadow:none;font-weight:700;
+}
+.sidebar-nav .main-module-tab.active-main-module .nav-icon { color:var(--primary); }
+.sidebar-bottom {
+  margin-top:auto;display:flex;align-items:center;gap:8px;padding:12px 11px;
+  border-top:1px solid var(--line);
+}
+.profile-mark { width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:#2563eb;color:#fff;font-size:9px;font-weight:800; }
+.profile-copy { display:flex;flex-direction:column;line-height:1.35; }
+.profile-copy strong {font-size:10px;color:#344258}
+.profile-copy small {font-size:8px;color:#94a3b8}
 .main-content { margin-left:214px;min-width:0; }
-.container { max-width:1600px;margin:0 auto;padding:22px 22px 36px; }
-.header { display:none; }
+.container { max-width:1680px;margin:0 auto;padding:22px 22px 28px; }
+.header { margin-bottom:14px;align-items:center; }
+.header-left { gap:11px; }
+.logo,.logo-placeholder { width:38px;height:38px;border-radius:9px; }
+h1 { font-size:19px;letter-spacing:-.025em; }
+.subtitle {font-size:10px;color:#7b8ba3;margin-top:2px}
+.actions { gap:7px; }
+button,.file-btn {border-radius:7px;padding:8px 12px;font-size:11px;min-height:34px}
+button.secondary,.file-btn.secondary {box-shadow:none}
 .main-module-tabs { display:none; }
-.statusbar { display:none; }
-.filters { padding:14px 16px 12px;border-radius:9px;margin-bottom:14px;box-shadow:none; }
-.filter-grid { grid-template-columns:repeat(8,minmax(0,1fr));gap:10px; }
+.statusbar {
+  padding:9px 12px;margin-bottom:12px;border-radius:8px;box-shadow:none;
+  font-size:10px;background:#fff;
+}
+.filters {padding:13px 14px 10px;margin-bottom:13px;border-radius:9px;box-shadow:none}
+.filter-grid {grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 12px}
 label {font-size:9px;color:#718096;margin-bottom:4px}
-select,input {height:31px;border-color:#dbe3ee;border-radius:6px;font-size:10px;padding:0 8px;color:#475569}
-select {font-size:10px}
-.filter-actions {justify-content:flex-end;margin-top:10px}
-.filter-actions button {font-size:10px;padding:7px 13px;border-radius:6px;min-height:30px}
+select,input {height:32px;border-radius:6px;border-color:#dce4ef;font-size:11px;padding:0 9px}
+select {font-size:11px}
+.filter-actions {justify-content:flex-end;align-items:center;margin-top:10px}
+.filter-actions button {min-height:31px;padding:7px 13px;font-size:10px}
 .filter-actions button.secondary {order:0}
 .filter-actions button:not(.secondary) {order:1}
-.cards {grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.cards {grid-template-columns:repeat(5,minmax(0,1fr));gap:11px;margin-bottom:13px}
 .card {padding:13px 14px 11px;border-radius:9px;box-shadow:none;min-width:0}
-.card:hover {transform:none;box-shadow:var(--shadow)}
-.card .label {font-size:9px;text-transform:uppercase;letter-spacing:.03em;color:#8190a5}
-.value {font-size:22px;line-height:1.2;margin-top:4px}
-.small {font-size:9px;color:#91a0b4}
-.charts-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:14px}
-.panel {padding:16px;border-radius:10px;box-shadow:none;min-width:0}
-.panel h2 {font-size:11px;line-height:1.35;margin:0 0 9px;color:#334155}
-.chart-panel {min-height:245px}
+.card:hover {transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+.card .label {font-size:9px;text-transform:uppercase;letter-spacing:.035em;color:#8190a5}
+.value {font-size:24px;line-height:1.2;margin-top:5px}
+.small {font-size:9px;color:#8a9ab0}
+.charts-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-bottom:13px}
+.panel {padding:15px;border-radius:9px;box-shadow:none;min-width:0}
+.panel h2 {font-size:11px;line-height:1.4;margin:0 0 10px;color:#334155}
+.chart-panel {min-height:250px}
 .chart-wrap {height:190px}
 .chart-wrap.tall {height:220px}
 .chart-note {font-size:9px}
-.table-wrap {overflow-x:auto}
+.table-wrap {overflow-x:auto;border-radius:6px}
 table {min-width:0;font-size:9px}
 th,td {padding:7px 8px}
 th {font-size:8px}
 .summary-matrix {font-size:9px}
 .summary-matrix th,.summary-matrix td {padding:7px 8px}
-.grid2 {margin-bottom:14px}
+.grid2 {margin-bottom:13px}
 .grid2 .panel {grid-column:auto!important}
-#activityChart {display:none}
-#activityChart {visibility:hidden}
-.charts-grid > .panel:has(#activityChart) {display:none}
 #channelSummary {min-width:0}
-.footer {font-size:9px;text-align:left;border-top:1px solid #e5ebf3;padding:12px 0 4px;color:#8b9ab0}
-#registrationModule .grid2 {display:block}
-#registrationModule .grid2 > .panel {width:100%}
-@media (min-width:1400px) {
- .container {padding:22px 22px 36px}
- .chart-panel {min-height:245px}
+.footer {font-size:9px;text-align:left;padding:12px 0 5px;color:#8b9ab0}
+.footer span {color:#a2adbd}
+.empty {padding:24px}
+button:focus-visible,input:focus-visible,select:focus-visible {outline:3px solid rgba(37,99,235,.2);outline-offset:1px}
+.modal-card,.customer-records-modal-card {border-radius:12px}
+.modal-header,.customer-records-modal-header {background:#fff}
+@media (min-width:1450px) {
+  .filter-grid {grid-template-columns:repeat(8,minmax(0,1fr))}
+  .chart-panel {min-height:245px}
 }
 @media (max-width:1100px) {
- .sidebar{width:190px}.main-content{margin-left:190px}
- .filter-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
- .cards{grid-template-columns:repeat(3,minmax(0,1fr))}
- .charts-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sidebar {width:190px}
+  .main-content {margin-left:190px}
+  .container {padding:16px}
+  .filter-grid {grid-template-columns:repeat(3,minmax(0,1fr))}
+  .cards {grid-template-columns:repeat(3,minmax(0,1fr))}
 }
-@media (max-width:700px) {
- .sidebar{position:static;width:100%;height:auto;border-right:0;border-bottom:1px solid #e5ebf3}
- .sidebar-brand{height:58px}.sidebar-section-label{padding:10px 14px 5px}
- .sidebar-nav{padding:0 8px 9px}
- .sidebar-nav .main-module-tabs{flex-direction:row}
- .sidebar-nav .main-module-tab{flex:1;justify-content:center;gap:5px;padding:8px 5px;font-size:10px}
- .sidebar-nav .main-module-tab .nav-count{display:none}
- .sidebar-bottom{display:none}
- .main-content{margin-left:0}
- .container{padding:12px}
- .filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
- .charts-grid{grid-template-columns:1fr}
- .chart-panel{min-height:260px}
- .chart-wrap{height:220px}
+@media (max-width:760px) {
+  .sidebar {position:relative;width:100%;inset:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .sidebar-brand {min-height:56px}
+  .sidebar-section-label {padding:10px 14px 6px}
+  .sidebar-nav {padding:0 8px 9px}
+  .sidebar-nav .main-module-tabs {flex-direction:row}
+  .sidebar-nav .main-module-tab {flex:1;justify-content:center;gap:6px;padding:8px 5px;font-size:10px}
+  .sidebar-bottom {display:none}
+  .main-content {margin-left:0}
+  .container {padding:12px}
+  .header {align-items:flex-start}
+  .header {flex-direction:column}
+  .actions {width:100%}
+  .actions button {flex:1;justify-content:center}
+  .filter-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cards {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .charts-grid {grid-template-columns:1fr}
+  .chart-panel {min-height:260px}
+  .chart-wrap {height:220px}
 }
-@media (max-width:420px) {
- .filter-grid{grid-template-columns:1fr}
- .cards{grid-template-columns:1fr 1fr}
+@media (max-width:440px) {
+  .container {padding:9px}
+  .header-left {align-items:flex-start}
+  h1 {font-size:16px}
+  .filter-grid {grid-template-columns:1fr}
+  .cards {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card {padding:12px}
+  .value {font-size:21px}
+  .actions {display:grid;grid-template-columns:1fr 1fr}
+  .statusbar {align-items:flex-start}
+}
+
+
+/* Top-left branding — reference screenshot style */
+.sidebar-brand-dashboard {
+  min-height: 68px;
+  padding: 11px 12px;
+  gap: 9px;
+  align-items: center;
+}
+.sidebar-brand-logo {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  flex: 0 0 38px;
+  border-radius: 7px;
+  background: #fff;
+}
+.sidebar-brand-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.sidebar-brand-copy strong {
+  margin: 0;
+  color: #172338;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  white-space: nowrap;
+}
+.sidebar-brand-copy small {
+  margin-top: 5px;
+  color: #718096;
+  font-size: 10px;
+  font-weight: 500;
+}
+@media (max-width: 760px) {
+  .sidebar-brand-dashboard {
+    min-height: 62px;
+  }
+  .sidebar-brand-copy strong {
+    font-size: 14px;
+  }
+}
+
+
+/* Final header fix:
+   Keep operational actions available, but show branding only once in the sidebar. */
+.header {
+  justify-content: flex-end;
+  min-height: 0;
+  margin-bottom: 12px;
+}
+.header-left { display: none; }
+.sidebar-brand-logo {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  color: #fff;
+  background: linear-gradient(135deg,#2563eb,#0ea5e9);
+  box-shadow: 0 2px 6px rgba(37,99,235,.18);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+
+/* Sidebar branding alignment fix */
+.sidebar-brand-dashboard {
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 10px;
+  gap: 8px;
+  overflow: hidden;
+}
+.sidebar-brand-logo {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+.sidebar-brand-copy {
+  min-width: 0;
+  max-width: calc(100% - 36px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.sidebar-brand-copy strong {
+  display: block;
+  max-width: 100%;
+  margin: 0;
+  color: #172338;
+  font-size: 10.5px;
+  line-height: 1.22;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.sidebar-brand-copy small {
+  display: block;
+  margin-top: 3px;
+  color: #718096;
+  font-size: 8px;
+  line-height: 1.2;
+  font-weight: 500;
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .sidebar-brand-dashboard {
+    min-height: 60px;
+  }
+  .sidebar-brand-copy strong {
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 </style>
@@ -482,21 +669,20 @@ th {font-size:8px}
 <body>
 <div class="app-shell">
   <aside class="sidebar" aria-label="Main navigation">
-    <div class="sidebar-brand">
-      <div class="brand-mark">P</div>
-      <div class="brand-copy"><strong>Pan Asia EZY</strong><small>BUILD FOR MORE</small></div>
+    <div class="sidebar-brand sidebar-brand-dashboard">
+      <div class="sidebar-brand-logo" aria-hidden="true">P</div>
+      <div class="sidebar-brand-copy">
+        <strong>Pan Asia EZY Registration Dashboard</strong>
+        <small>Build for More</small>
+      </div>
     </div>
-    <div class="sidebar-section-label">MODULES</div>
-    <nav class="sidebar-nav">
+    <div class="sidebar-section-label">CORE MODULES</div>
+    <nav class="sidebar-nav" aria-label="Dashboard modules">
       <div id="sidebarModuleMount"></div>
     </nav>
     <div class="sidebar-bottom">
-      <div class="profile-mark">OL</div>
+      <div class="profile-mark" aria-hidden="true">OL</div>
       <div class="profile-copy"><strong>Operations Lead</strong><small>Bank Ops • Colombo</small></div>
-      <div class="sidebar-quick-actions">
-        <button type="button" onclick="refreshData()" aria-label="Sync Google Sheet">↻</button>
-        <button type="button" onclick="downloadCSV()" aria-label="Export filtered details">↓</button>
-      </div>
     </div>
   </aside>
   <main class="main-content">
@@ -516,8 +702,8 @@ th {font-size:8px}
   </div>
 
   <div class="main-module-tabs" role="tablist" aria-label="Dashboard modules">
-    <button id="registrationModuleBtn" class="main-module-tab active-main-module" onclick="switchMainModule('registration')"><span class="nav-icon">▦</span><span>User Registrations</span><span class="nav-count" id="userNavCount">—</span></button>
-    <button id="serviceModuleBtn" class="main-module-tab" onclick="switchMainModule('services')"><span class="nav-icon">▤</span><span>Service Requests</span><span class="nav-count" id="serviceNavCount">—</span></button>
+    <button id="registrationModuleBtn" class="main-module-tab active-main-module" role="tab" aria-selected="true" onclick="switchMainModule('registration')"><span class="nav-icon" aria-hidden="true">▦</span><span>User Registrations</span></button>
+    <button id="serviceModuleBtn" class="main-module-tab" role="tab" aria-selected="false" onclick="switchMainModule('services')"><span class="nav-icon" aria-hidden="true">▤</span><span>Service Requests</span></button>
   </div>
 
   <div id="registrationModule">
@@ -748,10 +934,9 @@ th {font-size:8px}
       </div>
     </div>
 
-    <div class="footer">Service Requests Progress • Google Sheets CSV live sync • Filters run in the browser</div>
   </div><!-- /serviceModule -->
 
-  <div class="footer">Pan Asia EZY Dashboard • User Registrations & Service Requests</div>
+  <div class="footer">Pan Asia EZY • User Registrations & Service Requests <span>• Internal Operations Dashboard</span></div>
 
   <!-- Customer Records Popup -->
   <div id="customerRecordsPopup" class="customer-records-modal" onclick="closeCustomerRecordsPopup(event)">
@@ -826,7 +1011,6 @@ th {font-size:8px}
       </div>
     </div>
   </div>
-</div>
   </main>
 </div>
 
@@ -2014,6 +2198,8 @@ function switchMainModule(module) {
   document.getElementById("serviceModule").style.display = registration ? "none" : "block";
   document.getElementById("registrationModuleBtn").classList.toggle("active-main-module",registration);
   document.getElementById("serviceModuleBtn").classList.toggle("active-main-module",!registration);
+  document.getElementById("registrationModuleBtn").setAttribute("aria-selected", String(registration));
+  document.getElementById("serviceModuleBtn").setAttribute("aria-selected", String(!registration));
 
   if (!registration && !SERVICE_DATA.length) refreshServiceData();
   window.scrollTo({top:0,behavior:"smooth"});
